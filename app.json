@@ -33,6 +33,9 @@
         "projectId": "e42dbf9d-aaae-4168-995c-c5277d00ec2f"
       }
     },
-    "owner": "yvanov"
+    "owner": "yvanov",
+    "plugins": [
+      "expo-localization"
+    ]
   }
 }
