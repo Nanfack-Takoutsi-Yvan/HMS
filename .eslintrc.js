@@ -6,6 +6,8 @@ module.exports = {
         "react-native/react-native": true,
     },
     "extends": [
+        "airbnb",
+        "airbnb/hooks",
         "eslint:recommended",
         "plugin:react/recommended",
         "plugin:@typescript-eslint/recommended"
