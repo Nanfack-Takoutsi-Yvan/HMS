@@ -1,3 +1,24 @@
 {
-  
+  "common": {
+    "yes": "Oui",
+    "no": "No",
+    "week": {
+      "monday": "Lundi",
+      "tuesday": "Mardi",
+      "wednesday": "Mercredi",
+      "thursday": "Jeudi",
+      "friday": "Vendredi",
+      "saturday": "Samedi",
+      "sunday": "Dimance"
+    }
+  },
+  "availabilities": {
+    "tab": "Programmes",
+    "title": "Programme de consultation",
+    "available?": "Disponible ?",
+    "onSite": "Presentiel"
+  },
+  "settings": {
+    "tab": "Paramètres"
+  }
 }

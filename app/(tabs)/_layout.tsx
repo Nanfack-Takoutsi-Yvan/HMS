@@ -1,55 +1,54 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable, useColorScheme } from 'react-native';
+import { Tabs } from "expo-router"
+import { StyleSheet, View } from "react-native"
+import Icon from "react-native-paper/src/components/Icon"
+import { IconButton, useTheme } from "react-native-paper"
 
-import Colors from '../../constants/Colors';
-
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import { useContext } from "react"
+import AppStateContext from "@services/context"
+import Avatar from "@components/Avatar"
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const { colors } = useTheme()
+  const { locale } = useContext(AppStateContext)
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-      }}>
+        tabBarActiveTintColor: colors.primary
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          headerTitle: "",
+          title: locale.t("availabilities.tab"),
+          headerStyle: styles.header,
+          tabBarIcon: ({ color, size }) => (
+            <Icon source="calendar-today" color={color} size={size} />
           ),
+          headerLeft: () => (
+            <View style={styles.avatarContainer}>
+              <IconButton icon="arrow-left" style={styles.iconButton} />
+              <Avatar title="Dr Patrick James" subtitle="Ophthalmologist" />
+            </View>
+          )
         }}
       />
       <Tabs.Screen
         name="two"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: locale.t("settings.tab"),
+          tabBarIcon: ({ color, size }) => (
+            <Icon source="cog-outline" color={color} size={size} />
+          )
         }}
       />
     </Tabs>
-  );
+  )
 }
+
+const styles = StyleSheet.create({
+  header: { shadowColor: "transparent" },
+  avatarContainer: { flexDirection: "row", columnGap: 4 },
+  iconButton: { marginLeft: 15 }
+})
