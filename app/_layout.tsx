@@ -1,13 +1,13 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { PaperProvider } from 'react-native-paper';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect, useMemo } from 'react';
 import { useColorScheme } from 'react-native';
-import useLocales from '../hooks/locale/useTranslation';
 import * as localization from "expo-localization"
-import AppStateContext from '../services/context';
-import React from 'react';
+
+import useLocales from '@hooks/locale/useTranslation';
+import AppStateContext from "@services/context";
 
 
 export {
@@ -53,12 +53,12 @@ function RootLayoutNav() {
   return (
     <>
       <AppStateContext.Provider value={contextValue}>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <PaperProvider>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
           </Stack>
-        </ThemeProvider>
+        </PaperProvider>
       </AppStateContext.Provider>
     </>
   );

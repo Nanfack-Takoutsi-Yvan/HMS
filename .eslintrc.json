@@ -1,0 +1,64 @@
+{
+    "extends": [
+      "airbnb",
+      "prettier",
+      "airbnb/hooks",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "plugins": ["@typescript-eslint", "react", "prettier"],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 2021,
+      "sourceType": "module",
+      "project": "./tsconfig.json"
+    },
+    "rules": {
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "ts": "never",
+          "tsx": "never"
+        }
+      ],
+      "import/no-unresolved": "off",
+      "react/jsx-filename-extension": [
+        "error",
+        {
+          "extensions": [".ts", ".tsx"]
+        }
+      ],
+      "prettier/prettier": [
+        "error",
+        {
+          "semi": false,
+          "singleQuote": false,
+          "arrowParens": "avoid",
+          "trailingComma": "none"
+        }
+      ],
+      "camelcase": "off",
+      "no-shadow": "off",
+      "react/prop-types": "off",
+      "global-require": "off",
+      "no-use-before-define": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/no-unescaped-entities": "off",
+      "react/require-default-props": "off",
+      "react/jsx-props-no-spreading": "off",
+      "@typescript-eslint/no-shadow": ["error"],
+      "react/no-unstable-nested-components": "off",
+      "import/no-extraneous-dependencies": "off"
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        }
+      }
+    }
+  }
+  
