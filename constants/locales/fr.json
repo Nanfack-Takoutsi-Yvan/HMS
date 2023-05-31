@@ -10,6 +10,9 @@
       "friday": "Vendredi",
       "saturday": "Samedi",
       "sunday": "Dimance"
+    },
+    "specialties": {
+      "ophthalmologist": "ophthalmologue"
     }
   },
   "availabilities": {
@@ -20,5 +23,8 @@
   },
   "settings": {
     "tab": "Paramètres"
+  },
+  "modal": {
+    "title": "Nouveau Prog. de consult" 
   }
 }

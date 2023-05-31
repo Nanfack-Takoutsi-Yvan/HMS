@@ -4,10 +4,12 @@ import { useContext } from "react"
 import { StyleSheet, View, ScrollView } from "react-native"
 import { Text, FAB, useTheme } from "react-native-paper"
 import bookings from "@constants/utils/booking.json"
+import { useRouter } from "expo-router"
 
 export default function TabOneScreen() {
   const { locale } = useContext(AppStateContext)
   const { colors } = useTheme()
+  const router = useRouter()
 
   return (
     <View style={styles.screen}>
@@ -25,7 +27,7 @@ export default function TabOneScreen() {
         icon="plus"
         color="#fff"
         style={[styles.fab, { backgroundColor: colors.primary }]}
-        onPress={() => null}
+        onPress={() => router.push("modal")}
       />
     </View>
   )

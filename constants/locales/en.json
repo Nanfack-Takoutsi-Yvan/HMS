@@ -10,6 +10,9 @@
       "friday": "Friday",
       "saturday": "Saturday",
       "sunday": "Sunday"
+    },
+    "specialties": {
+      "ophthalmologist": "ophthalmologist"
     }
   },
   "availabilities": {
@@ -20,5 +23,8 @@
   },
   "settings": {
     "tab": "Settings"
+  },
+  "modal": {
+    "title": "New consultation Prog." 
   }
 }
