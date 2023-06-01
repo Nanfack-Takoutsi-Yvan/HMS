@@ -1,6 +1,13 @@
 import { Stack, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { Button, IconButton, Switch, Text, TextInput } from "react-native-paper"
+import {
+  Button,
+  IconButton,
+  Switch,
+  Text,
+  TextInput,
+  useTheme
+} from "react-native-paper"
 import { Formik } from "formik"
 import {
   View,
@@ -13,18 +20,35 @@ import {
 } from "react-native"
 
 import Appointment from "@services/models/appointment"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import AppStateContext from "@services/context"
 import CalendarDays from "@components/CalendarDays"
 import { DATE_FORMAT } from "@components/CalendarDays/__index.utils"
+import DateInput from "@components/DateInput/index"
+import {
+  MultipleSelectList,
+  SelectList
+} from "react-native-dropdown-select-list"
+import Icon from "react-native-paper/src/components/Icon"
 
 export default function ModalScreen() {
+  const [categories, setCategories] = useState([])
+
   const { locale } = useContext(AppStateContext)
+  const { colors } = useTheme()
   const router = useRouter()
 
   const data = [
-    { key: "1", value: "À Distance" },
-    { key: "2", value: "Présentiel" }
+    { key: "onSite", value: locale.t("availabilities.onSite") },
+    { key: "remote", value: locale.t("availabilities.remote") }
+  ]
+
+  const data2 = [
+    { key: "Canada", value: "Canada" },
+    { key: "England", value: "England" },
+    { key: "Pakistan", value: "Pakistan" },
+    { key: "India", value: "India" },
+    { key: "NewZealand", value: "NewZealand" }
   ]
 
   return (
@@ -36,17 +60,14 @@ export default function ModalScreen() {
       >
         <SafeAreaView style={styles.screen}>
           <View style={styles.container}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center"
-              }}
-            >
+            <View style={styles.header}>
               <Text variant="titleLarge">{locale.t("modal.title")}</Text>
               <IconButton icon="close" onPress={() => router.push("../")} />
             </View>
-            <ScrollView style={styles.screen}>
+            <ScrollView
+              style={styles.screen}
+              showsVerticalScrollIndicator={false}
+            >
               <Formik
                 initialValues={new Appointment()}
                 onSubmit={() => undefined}
@@ -59,84 +80,131 @@ export default function ModalScreen() {
                   errors,
                   touched
                 }) => (
-                  <View style={[styles.screen, { rowGap: 24 }]}>
-                    <View
-                      style={{
-                        borderRadius: 20,
-                        borderWidth: 1,
-                        borderColor: "rgba(0,0,0,0.08)",
-                        paddingHorizontal: 16,
-                        rowGap: 2
-                      }}
-                    >
+                  <View style={styles.form}>
+                    <View style={styles.consignView}>
                       <View>
-                        <Text variant="titleMedium">Consigne</Text>
+                        <Text variant="labelSmall">
+                          {locale.t("modal.consultancyTypeSectionTitle")}
+                        </Text>
+                      </View>
+                      <SelectList
+                        setSelected={(val: string) => {
+                          handleChange("type")(val)
+                        }}
+                        data={data}
+                        save="key"
+                        search={false}
+                        defaultOption={data[0]}
+                        arrowicon={<Icon source="chevron-down" size={24} />}
+                        boxStyles={styles.selectInput}
+                        dropdownStyles={styles.dropDown}
+                        dropdownItemStyles={styles.dropDownItem}
+                      />
+                    </View>
+
+                    <View style={styles.consignView}>
+                      <View>
+                        <Text variant="labelSmall">
+                          {locale.t("modal.consultancyLocation")}
+                        </Text>
+                      </View>
+                      <MultipleSelectList
+                        setSelected={() => null}
+                        data={data}
+                        save="key"
+                        arrowicon={<Icon source="chevron-down" size={24} />}
+                        boxStyles={styles.multipleSelectInput}
+                        dropdownStyles={styles.dropDown}
+                        dropdownItemStyles={styles.dropDownItem}
+                        placeholder="select location"
+                        badgeStyles={{
+                          backgroundColor: colors.primary,
+                          borderRadius: 6
+                        }}
+                      />
+                    </View>
+
+                    <View style={styles.consignView}>
+                      <View>
+                        <Text variant="titleMedium">
+                          {locale.t("modal.consign")}
+                        </Text>
                       </View>
                       <View style={{ flex: 1 }}>
                         <Pressable
                           onPress={() => router.push("consign")}
-                          style={{
-                            flex: 1,
-                            height: 75
-                          }}
+                          style={styles.days}
                         >
                           <Text
                             numberOfLines={2}
                             ellipsizeMode="tail"
                             variant="labelLarge"
                           >
-                            Entrez votre texte
+                            {locale.t("modal.consignPlaceholder")}
                           </Text>
                         </Pressable>
                       </View>
                     </View>
 
                     <View style={{ rowGap: 4 }}>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "center"
-                        }}
-                      >
+                      <View style={styles.switchSection}>
                         <Text variant="titleMedium">
-                          Activer les rendez vous
+                          {locale.t("modal.switchSectionTitle")}
                         </Text>
-                        <Switch />
+                        <Switch
+                          value={`${values.activate}` !== "false"}
+                          onValueChange={value => {
+                            handleChange("activate")(`${value}`)
+                          }}
+                        />
                       </View>
                       <Text variant="bodySmall">
-                        Durée de 20 mins vec 20 mins de pause apres 6 patients
+                        {locale.t("modal.switchSectionDescription")}
                       </Text>
                     </View>
 
                     <View style={{ rowGap: 12 }}>
                       <View>
                         <Text variant="titleMedium">
-                          Choisir les jours de consultation
+                          {locale.t("modal.calendarSectionTitle")}
                         </Text>
                       </View>
                       <View>
                         <CalendarDays
-                          elementStyle={{
-                            flex: 1,
-                            height: 50,
-                            borderRadius: 13
-                          }}
+                          elementStyle={styles.dayTile}
                           format={DATE_FORMAT.LONG}
+                          value={values.days}
+                          onChange={handleChange("days")}
                         />
                       </View>
                     </View>
 
                     <View>
                       <View>
-                        <Text>Choisir la plage horaite de consultation</Text>
+                        <Text variant="titleMedium">
+                          {locale.t("modal.timeSectionTitle")}
+                        </Text>
                       </View>
-                      <View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          columnGap: 24,
+                          paddingTop: 12
+                        }}
+                      >
                         <View>
-                          <Text>Debut</Text>
+                          <DateInput
+                            value={values.startTime}
+                            onChange={handleChange("startTime")}
+                            label={locale.t("common.start")}
+                          />
                         </View>
                         <View>
-                          <Text>Fin</Text>
+                          <DateInput
+                            value={values.endTime}
+                            onChange={handleChange("endTime")}
+                            label={locale.t("common.end")}
+                          />
                         </View>
                       </View>
                     </View>
@@ -144,17 +212,21 @@ export default function ModalScreen() {
                     <View style={{ rowGap: 12 }}>
                       <View>
                         <Text variant="titleMedium">
-                          Cout de la consultation
+                          {locale.t("modal.priceSectionTitle")}
                         </Text>
                       </View>
                       <View>
                         <TextInput
-                          placeholder="Montant"
+                          mode="outlined"
+                          placeholder={locale.t("common.amount")}
                           onChangeText={handleChange("price")}
                           onBlur={handleBlur("price")}
-                          value={values.price.toString()}
+                          value={values.price?.toString()}
                           keyboardType="numeric"
+                          autoComplete="off"
                           right={<TextInput.Affix text="xaf" />}
+                          style={styles.field}
+                          outlineStyle={styles.fieldOutline}
                           dense
                         />
                       </View>
@@ -163,12 +235,10 @@ export default function ModalScreen() {
                     <View>
                       <Button
                         mode="contained"
-                        onPress={() => console.log("Pressed")}
-                        style={{
-                          borderRadius: 5
-                        }}
+                        onPress={() => handleSubmit()}
+                        style={styles.button}
                       >
-                        Valider
+                        {locale.t("common.submit")}
                       </Button>
                     </View>
                   </View>
@@ -202,5 +272,60 @@ const styles = StyleSheet.create({
     width: "80%"
   },
   iconButton: { marginRight: 15 },
-  header: { shadowColor: "transparent" }
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  form: {
+    rowGap: 24,
+    flex: 1
+  },
+  consignView: {
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.08)",
+    paddingHorizontal: 16,
+    rowGap: 2
+  },
+  days: {
+    flex: 1,
+    height: 75
+  },
+  switchSection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  dayTile: {
+    flex: 1,
+    height: 50,
+    borderRadius: 13
+  },
+  field: {
+    backgroundColor: "#fff"
+  },
+  fieldOutline: {
+    borderWidth: 1
+  },
+  button: {
+    borderRadius: 5
+  },
+  selectInput: {
+    borderColor: "transparent",
+    paddingHorizontal: 0
+  },
+  dropDown: {
+    borderColor: "transparent",
+    borderTopColor: "rgba(30,30,30,0.1)",
+    borderRadius: 0
+  },
+  dropDownItem: {
+    paddingHorizontal: 0
+  },
+  multipleSelectInput: {
+    borderColor: "transparent",
+    paddingHorizontal: 0,
+    padding: 0
+  }
 })

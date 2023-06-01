@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app"
 
 // Optionally import the services that you want to use
 // import {...} from "firebase/auth";
@@ -15,9 +15,9 @@ const firebaseConfig = {
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID,
-};
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID
+}
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig)
 // For more information on how to access Firebase in your project,
 // see the Firebase documentation: https://firebase.google.com/docs/web/setup#access-firebase

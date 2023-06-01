@@ -1,33 +1,42 @@
 import { View } from "@components/Themed"
 import AppStateContext from "@services/context"
-import { FC, useContext, useState } from "react"
+import { FC, useContext, useEffect, useState } from "react"
 import { Text, useTheme } from "react-native-paper"
-import { StyleSheet, Pressable } from "react-native"
+import { StyleSheet, TouchableOpacity } from "react-native"
 import { DATE_FORMAT } from "./__index.utils"
 import { CalendarDaysProps, CalendarDaysType, Days } from "./index.types"
 
 const CalendarDays: FC<CalendarDaysProps> = ({
+  style,
+  value,
   format,
   onChange,
-  style,
-  elementStyle,
-  textStyle
+  textStyle,
+  elementStyle
 }) => {
-  const [selectedDays, setSelectedDays] = useState<CalendarDaysType>(
-    {} as CalendarDaysType
-  )
+  const [selectedDays, setSelectedDays] = useState<CalendarDaysType>([])
 
   const { colors } = useTheme()
   const { locale } = useContext(AppStateContext)
 
   const selectADay = (day: Days) => {
+    const days = selectedDays.includes(day)
+      ? selectedDays.filter(currentDay => currentDay !== day)
+      : [...selectedDays, day]
+
     if (onChange) {
-      setSelectedDays(currentSelection => ({
-        ...currentSelection,
-        [day]: !currentSelection[day]
-      }))
+      onChange(days.toString())
     }
   }
+
+  useEffect(() => {
+    if (value) {
+      const days = value.split(",") as CalendarDaysType
+      setSelectedDays(days)
+    } else {
+      setSelectedDays([])
+    }
+  }, [value])
 
   const numberOfLetters = {
     [DATE_FORMAT.LONG]: 3,
@@ -52,13 +61,13 @@ const CalendarDays: FC<CalendarDaysProps> = ({
             styles.dateContainer,
             elementStyle,
             {
-              backgroundColor: selectedDays[day as Days]
+              backgroundColor: selectedDays.includes(day as Days)
                 ? colors.primary
                 : "rgba(0,0,0,0.05)"
             }
           ]}
         >
-          <Pressable
+          <TouchableOpacity
             style={styles.pressable}
             onPress={selectADay.bind(null, day as Days)}
           >
@@ -69,7 +78,9 @@ const CalendarDays: FC<CalendarDaysProps> = ({
               style={[
                 styles.date,
                 textStyle,
-                { color: selectedDays[day as Days] ? "#fff" : undefined }
+                {
+                  color: selectedDays.includes(day as Days) ? "#fff" : undefined
+                }
               ]}
             >
               {weekDays[day as Days].substring(
@@ -77,7 +88,7 @@ const CalendarDays: FC<CalendarDaysProps> = ({
                 numberOfLetters[format || DATE_FORMAT.SHORT]
               )}
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       ))}
     </View>

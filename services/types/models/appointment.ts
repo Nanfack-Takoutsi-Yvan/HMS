@@ -6,8 +6,8 @@ export interface IAppointment {
   location: string[]
   consign: string
   activate: boolean
-  days: CalendarDaysType,
-  startTime: string,
-  endTime: string,
-  price: number
+  days: string
+  startTime: string
+  endTime: string
+  price: number | null
 }

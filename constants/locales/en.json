@@ -13,18 +13,36 @@
     },
     "specialties": {
       "ophthalmologist": "ophthalmologist"
-    }
+    },
+    "amount": "Amount",
+    "submit": "Submit",
+    "start": "Start",
+    "end": "End"
   },
   "availabilities": {
     "tab": "Programs",
-    "title": "Consultation program",
+    "title": "Consultancy program",
     "available?": "Available ?",
-    "onSite": "On site"
+    "onSite": "On site",
+    "remote": "Remote"
   },
   "settings": {
     "tab": "Settings"
   },
   "modal": {
-    "title": "New consultation Prog." 
+    "title": "New Consultancy Prog.",
+    "consign": "Consign",
+    "consignPlaceholder": "Enter your text...",
+    "switchSectionTitle": "Activate meetings",
+    "switchSectionDescription": "Duration 20 mins with 20 mins break after 6 patients",
+    "calendarSectionTitle": "Select Consultancy days",
+    "timeSectionTitle": "Select Consultancy time slot",
+    "priceSectionTitle": "Consultancy costs",
+    "consultancyTypeSectionTitle": "Consultancy type",
+    "consultancyLocation": "Consultancy location"
+  },
+  "consign": {
+    "title": "Enter consign",
+    "save": "Save"
   }
 }

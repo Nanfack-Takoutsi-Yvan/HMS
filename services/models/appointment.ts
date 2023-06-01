@@ -14,13 +14,13 @@ export default class Appointment implements IAppointment {
 
   activate = false
 
-  days = {} as CalendarDaysType
+  days = ""
 
   startTime = ""
 
   endTime = ""
 
-  price = 0
+  price!: number | null
 
   constructor(appointment?: IAppointment) {
     if (appointment) {

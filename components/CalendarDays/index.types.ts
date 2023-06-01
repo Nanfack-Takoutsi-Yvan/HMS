@@ -2,11 +2,12 @@ import { StyleProp, TextStyle, ViewStyle } from "react-native"
 import { DATE_FORMAT } from "./__index.utils"
 
 export type CalendarDaysProps = {
+  value?: string
   format: DATE_FORMAT
-  onChange?: (value: CalendarDaysType) => void
   style?: StyleProp<ViewStyle>
-  elementStyle?: StyleProp<ViewStyle>
   textStyle?: StyleProp<TextStyle>
+  elementStyle?: StyleProp<ViewStyle>
+  onChange?: (value: string) => void
 }
 
 export type Days =
@@ -18,12 +19,4 @@ export type Days =
   | "saturday"
   | "sunday"
 
-export type CalendarDaysType = {
-  monday: boolean
-  tuesday: boolean
-  wednesday: boolean
-  thursday: boolean
-  friday: boolean
-  saturday: boolean
-  sunday: boolean
-}
+export type CalendarDaysType = Days[]
