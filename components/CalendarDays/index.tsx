@@ -6,7 +6,13 @@ import { StyleSheet, Pressable } from "react-native"
 import { DATE_FORMAT } from "./__index.utils"
 import { CalendarDaysProps, CalendarDaysType, Days } from "./index.types"
 
-const CalendarDays: FC<CalendarDaysProps> = ({ format, onChange }) => {
+const CalendarDays: FC<CalendarDaysProps> = ({
+  format,
+  onChange,
+  style,
+  elementStyle,
+  textStyle
+}) => {
   const [selectedDays, setSelectedDays] = useState<CalendarDaysType>(
     {} as CalendarDaysType
   )
@@ -38,12 +44,13 @@ const CalendarDays: FC<CalendarDaysProps> = ({ format, onChange }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       {Object.keys(weekDays).map(day => (
         <View
           key={day}
           style={[
             styles.dateContainer,
+            elementStyle,
             {
               backgroundColor: selectedDays[day as Days]
                 ? colors.primary
@@ -52,13 +59,16 @@ const CalendarDays: FC<CalendarDaysProps> = ({ format, onChange }) => {
           ]}
         >
           <Pressable
-            style={{ flex: 1 }}
+            style={styles.pressable}
             onPress={selectADay.bind(null, day as Days)}
           >
             <Text
-              variant="labelSmall"
+              variant={
+                format === DATE_FORMAT.LONG ? "labelLarge" : "labelSmall"
+              }
               style={[
                 styles.date,
+                textStyle,
                 { color: selectedDays[day as Days] ? "#fff" : undefined }
               ]}
             >
@@ -89,7 +99,8 @@ const styles = StyleSheet.create({
   },
   date: {
     textAlign: "center"
-  }
+  },
+  pressable: { flex: 1, justifyContent: "center", alignItems: "center" }
 })
 
 export default CalendarDays

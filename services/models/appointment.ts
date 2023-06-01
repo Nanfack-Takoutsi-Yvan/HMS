@@ -5,16 +5,26 @@ import { IAppointment } from "@services/types/models/appointment"
 
 export default class Appointment implements IAppointment {
   id = ""
+
   type = ""
-  location = [] 
+
+  location = []
+
   consign = ""
+
   activate = false
+
   days = {} as CalendarDaysType
+
   startTime = ""
+
   endTime = ""
+
   price = 0
 
-  constructor(appointment: IAppointment) {
-    Object.assign(this, appointment)
+  constructor(appointment?: IAppointment) {
+    if (appointment) {
+      Object.assign(this, appointment)
+    }
   }
 }

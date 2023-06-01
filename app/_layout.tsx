@@ -57,7 +57,10 @@ function RootLayoutNav() {
             name="modal"
             options={{ presentation: "containedModal" }}
           />
-          <Stack.Screen name="consign" options={{ presentation: "modal" }} />
+          <Stack.Screen
+            name="consign"
+            options={{ presentation: "containedModal" }}
+          />
         </Stack>
       </PaperProvider>
     </AppStateContext.Provider>

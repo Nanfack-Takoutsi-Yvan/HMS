@@ -2,7 +2,7 @@
 type BookingCardProps = {
   info: {
     hospitalName: string
-    consign: string
+    consign?: string
     price: number
     startTime: string
     endTime: string

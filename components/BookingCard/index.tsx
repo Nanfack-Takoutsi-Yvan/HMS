@@ -70,12 +70,16 @@ const BookingCard: FC<BookingCardProps> = ({
           </View>
         </View>
       </View>
-      <Divider />
-      <View style={[styles.cardFooter, styles.padding]}>
-        <Text numberOfLines={2} ellipsizeMode="tail">
-          {consign}
-        </Text>
-      </View>
+      {consign && (
+        <>
+          <Divider />
+          <View style={[styles.cardFooter, styles.padding]}>
+            <Text numberOfLines={2} ellipsizeMode="tail">
+              {consign}
+            </Text>
+          </View>
+        </>
+      )}
     </View>
   )
 }
