@@ -49,7 +49,7 @@ const DateInput: FC<DateInput> = ({ label, value, onChange }) => {
       {Platform.OS === "android" ? (
         <View>
           <TouchableOpacity style={styles.frame} onPress={showTimepicker}>
-            <Text variant="bodyLarge">{getTime(date.toString())}</Text>
+            <Text variant="bodyLarge">{getTime(date.toUTCString())}</Text>
           </TouchableOpacity>
           {show && (
             <DateTimePicker
@@ -78,7 +78,9 @@ const DateInput: FC<DateInput> = ({ label, value, onChange }) => {
 
 const styles = StyleSheet.create({
   container: {
-    rowGap: 4
+    rowGap: 4,
+    justifyContent: "center",
+    alignContent: "center"
   },
   labelContainer: {
     justifyContent: "center",

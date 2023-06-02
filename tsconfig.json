@@ -3,12 +3,14 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "paths": {
+      "@db/*": ["db/*"],
       "@src/*": ["src/*"],
       "@app/*": ["app/*"],
       "@utils/*": ["utils/*"],
       "@hooks/*": ["hooks/*"],
-      "@theme/*": ["theme/*"],
       "@assets/*": ["assets/*"],
       "@typings/*": ["typings/*"],
       "@services/*": ["services/*"],

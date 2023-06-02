@@ -1,28 +1,45 @@
 import BookingCard from "@components/BookingCard"
 import AppStateContext from "@services/context"
 import { useContext } from "react"
-import { StyleSheet, View, ScrollView } from "react-native"
+import { StyleSheet, View, ScrollView, FlatList } from "react-native"
 import { Text, FAB, useTheme } from "react-native-paper"
-import bookings from "@constants/utils/booking.json"
 import { useRouter } from "expo-router"
+import SkeletonLoaders from "@components/SkeletonLoaders"
 
 export default function TabOneScreen() {
-  const { locale } = useContext(AppStateContext)
+  const { locale, appointments, loading } = useContext(AppStateContext)
   const { colors } = useTheme()
   const router = useRouter()
 
+  const sortedAppointments = appointments?.sort(
+    (appointmentA, appointmentB) =>
+      new Date(appointmentA?.startTime).getTime() -
+      new Date(appointmentB?.startTime).getTime()
+  )
+
   return (
-    <View style={styles.screen}>
-      <ScrollView style={styles.screen}>
-        <View style={styles.container}>
-          <View>
-            <Text variant="titleLarge">{locale.t("availabilities.title")}</Text>
+    <View style={styles.container}>
+      <View>
+        <Text variant="titleLarge">{locale.t("availabilities.title")}</Text>
+      </View>
+
+      {loading && (
+        <ScrollView style={styles.screen} showsVerticalScrollIndicator={false}>
+          <View style={styles.screen}>
+            <SkeletonLoaders number={2} />
           </View>
-          {bookings.map(booking => (
-            <BookingCard key={booking.id} info={booking} />
-          ))}
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
+
+      {!loading && (
+        <FlatList
+          data={sortedAppointments}
+          contentContainerStyle={{ rowGap: 16 }}
+          renderItem={data => <BookingCard info={data.item} />}
+          keyExtractor={item => item.id}
+        />
+      )}
+
       <FAB
         icon="plus"
         color="#fff"
@@ -35,14 +52,14 @@ export default function TabOneScreen() {
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
-    backgroundColor: "#fff"
+    flex: 1
   },
   container: {
     flex: 1,
-    marginTop: 30,
-    marginHorizontal: 24,
-    rowGap: 16
+    paddingTop: 30,
+    paddingHorizontal: 24,
+    rowGap: 16,
+    backgroundColor: "#fff"
   },
   fab: {
     position: "absolute",

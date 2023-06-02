@@ -5,6 +5,7 @@ module.exports = function (api) {
     plugins: [
       "react-native-reanimated/plugin",
       require.resolve("expo-router/babel"),
+      ["@babel/plugin-proposal-decorators", { version: "legacy" }],
       [
         "module-resolver",
         {
@@ -20,11 +21,11 @@ module.exports = function (api) {
             ".tsx"
           ],
           alias: {
+            "@db": "./db",
             "@src": "./src",
             "@app": "./app",
             "@utils": "./utils",
             "@hooks": "./hooks",
-            "@theme": "./theme",
             "@assets": "./assets",
             "@locales": "./locales",
             "@typings": "./typings",

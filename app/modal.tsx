@@ -1,4 +1,4 @@
-import { Stack, useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import {
   Button,
@@ -8,7 +8,7 @@ import {
   TextInput,
   useTheme
 } from "react-native-paper"
-import { Formik } from "formik"
+import { Formik, useFormikContext } from "formik"
 import {
   View,
   Platform,
@@ -16,11 +16,11 @@ import {
   StyleSheet,
   SafeAreaView,
   KeyboardAvoidingView,
-  Pressable
+  TouchableOpacity
 } from "react-native"
 
 import Appointment from "@services/models/appointment"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import AppStateContext from "@services/context"
 import CalendarDays from "@components/CalendarDays"
 import { DATE_FORMAT } from "@components/CalendarDays/__index.utils"
@@ -30,26 +30,65 @@ import {
   SelectList
 } from "react-native-dropdown-select-list"
 import Icon from "react-native-paper/src/components/Icon"
+import { RichTextViewer } from "@siposdani87/expo-rich-text-editor"
+import createAppointmentSchema from "@services/validation/createAppointmentSchema"
 
 export default function ModalScreen() {
-  const [categories, setCategories] = useState([])
+  const [selected, setSelected] = useState([])
 
   const { locale } = useContext(AppStateContext)
   const { colors } = useTheme()
   const router = useRouter()
+  const { consign } = useLocalSearchParams() as { consign: string }
+
+  const HandleConsignChanges = ({ value }: { value: string }) => {
+    // Grab values from params and update formik from context
+    const { handleChange } = useFormikContext()
+    useEffect(() => {
+      handleChange("consign")(consign || "")
+    }, [value, handleChange])
+
+    return null
+  }
 
   const data = [
     { key: "onSite", value: locale.t("availabilities.onSite") },
     { key: "remote", value: locale.t("availabilities.remote") }
   ]
 
-  const data2 = [
-    { key: "Canada", value: "Canada" },
-    { key: "England", value: "England" },
-    { key: "Pakistan", value: "Pakistan" },
-    { key: "India", value: "India" },
-    { key: "NewZealand", value: "NewZealand" }
+  const hospitals = [
+    { key: "sjdh-euos", value: locale.t("hospitals.sjdh-euos") },
+    { key: "hsex-elsy", value: locale.t("hospitals.hsex-elsy") }
   ]
+
+  const handleSave = ({
+    activate,
+    consign: consignValue,
+    days,
+    endTime,
+    location,
+    price,
+    startTime,
+    type
+  }: Appointment) => {
+    const appointment = new Appointment({
+      activate,
+      consign: consignValue,
+      days,
+      endTime,
+      location,
+      price,
+      startTime,
+      type
+    } as IAppointment)
+
+    appointment
+      .save()
+      .catch(err => console.log(err))
+      .finally(() => {
+        router.push("(tabs)")
+      })
+  }
 
   return (
     <>
@@ -70,7 +109,8 @@ export default function ModalScreen() {
             >
               <Formik
                 initialValues={new Appointment()}
-                onSubmit={() => undefined}
+                validationSchema={createAppointmentSchema}
+                onSubmit={handleSave}
               >
                 {({
                   handleChange,
@@ -81,47 +121,89 @@ export default function ModalScreen() {
                   touched
                 }) => (
                   <View style={styles.form}>
-                    <View style={styles.consignView}>
-                      <View>
-                        <Text variant="labelSmall">
-                          {locale.t("modal.consultancyTypeSectionTitle")}
-                        </Text>
+                    <View>
+                      <View
+                        style={[
+                          styles.consignView,
+                          {
+                            borderColor:
+                              errors.type && touched.type
+                                ? colors.error
+                                : "rgba(0,0,0,0.08)"
+                          }
+                        ]}
+                      >
+                        <View>
+                          <Text variant="labelSmall">
+                            {locale.t("modal.consultancyTypeSectionTitle")}
+                          </Text>
+                        </View>
+                        <SelectList
+                          setSelected={(val: string) => {
+                            handleChange("type")(val)
+                          }}
+                          data={data}
+                          save="key"
+                          search={false}
+                          boxStyles={styles.selectInput}
+                          dropdownStyles={styles.dropDown}
+                          dropdownItemStyles={styles.dropDownItem}
+                          placeholder={locale.t("modal.select")}
+                          arrowicon={<Icon source="chevron-down" size={24} />}
+                        />
                       </View>
-                      <SelectList
-                        setSelected={(val: string) => {
-                          handleChange("type")(val)
-                        }}
-                        data={data}
-                        save="key"
-                        search={false}
-                        defaultOption={data[0]}
-                        arrowicon={<Icon source="chevron-down" size={24} />}
-                        boxStyles={styles.selectInput}
-                        dropdownStyles={styles.dropDown}
-                        dropdownItemStyles={styles.dropDownItem}
-                      />
+
+                      {errors.type && touched.type && (
+                        <View>
+                          <Text style={{ color: colors.error }}>
+                            {locale.t(errors.type)}
+                          </Text>
+                        </View>
+                      )}
                     </View>
 
-                    <View style={styles.consignView}>
-                      <View>
-                        <Text variant="labelSmall">
-                          {locale.t("modal.consultancyLocation")}
-                        </Text>
+                    <View>
+                      <View
+                        style={[
+                          styles.consignView,
+                          {
+                            borderColor:
+                              errors.location && touched.location
+                                ? colors.error
+                                : "rgba(0,0,0,0.08)"
+                          }
+                        ]}
+                      >
+                        <MultipleSelectList
+                          setSelected={(val: any) => {
+                            setSelected(val)
+                          }}
+                          onSelect={() =>
+                            handleChange("location")(selected.join(","))
+                          }
+                          data={hospitals}
+                          save="key"
+                          arrowicon={<Icon source="chevron-down" size={24} />}
+                          boxStyles={styles.multipleSelectInput}
+                          dropdownStyles={styles.dropDown}
+                          dropdownItemStyles={styles.dropDownItem}
+                          label={locale.t("modal.consultancyLocation")}
+                          labelStyles={{ fontSize: 12 }}
+                          placeholder="select location"
+                          badgeStyles={{
+                            backgroundColor: colors.primary,
+                            borderRadius: 6
+                          }}
+                        />
                       </View>
-                      <MultipleSelectList
-                        setSelected={() => null}
-                        data={data}
-                        save="key"
-                        arrowicon={<Icon source="chevron-down" size={24} />}
-                        boxStyles={styles.multipleSelectInput}
-                        dropdownStyles={styles.dropDown}
-                        dropdownItemStyles={styles.dropDownItem}
-                        placeholder="select location"
-                        badgeStyles={{
-                          backgroundColor: colors.primary,
-                          borderRadius: 6
-                        }}
-                      />
+
+                      {errors.location && touched.location && (
+                        <View>
+                          <Text style={{ color: colors.error }}>
+                            {locale.t(errors.location)}
+                          </Text>
+                        </View>
+                      )}
                     </View>
 
                     <View style={styles.consignView}>
@@ -131,18 +213,29 @@ export default function ModalScreen() {
                         </Text>
                       </View>
                       <View style={{ flex: 1 }}>
-                        <Pressable
-                          onPress={() => router.push("consign")}
+                        <TouchableOpacity
+                          onPress={() =>
+                            router.push({
+                              pathname: "consign",
+                              params: { consign: values.consign || consign }
+                            })
+                          }
                           style={styles.days}
                         >
-                          <Text
-                            numberOfLines={2}
-                            ellipsizeMode="tail"
-                            variant="labelLarge"
-                          >
-                            {locale.t("modal.consignPlaceholder")}
-                          </Text>
-                        </Pressable>
+                          {!consign && (
+                            <Text
+                              numberOfLines={2}
+                              ellipsizeMode="tail"
+                              variant="labelLarge"
+                            >
+                              {locale.t("modal.consignPlaceholder")}
+                            </Text>
+                          )}
+
+                          {!!consign && (
+                            <RichTextViewer viewerStyle={{}} value={consign} />
+                          )}
+                        </TouchableOpacity>
                       </View>
                     </View>
 
@@ -152,7 +245,7 @@ export default function ModalScreen() {
                           {locale.t("modal.switchSectionTitle")}
                         </Text>
                         <Switch
-                          value={`${values.activate}` !== "false"}
+                          value={`${values.activate}` === "true"}
                           onValueChange={value => {
                             handleChange("activate")(`${value}`)
                           }}
@@ -227,8 +320,16 @@ export default function ModalScreen() {
                           right={<TextInput.Affix text="xaf" />}
                           style={styles.field}
                           outlineStyle={styles.fieldOutline}
+                          error={!!errors.price && touched.price}
                           dense
                         />
+                        {errors.price && touched.price && (
+                          <View>
+                            <Text style={{ color: colors.error }}>
+                              {locale.t(errors.price)}
+                            </Text>
+                          </View>
+                        )}
                       </View>
                     </View>
 
@@ -241,6 +342,7 @@ export default function ModalScreen() {
                         {locale.t("common.submit")}
                       </Button>
                     </View>
+                    <HandleConsignChanges value={consign} />
                   </View>
                 )}
               </Formik>
@@ -290,7 +392,9 @@ const styles = StyleSheet.create({
   },
   days: {
     flex: 1,
-    height: 75
+    height: 75,
+    overflow: "hidden",
+    paddingBottom: 8
   },
   switchSection: {
     flexDirection: "row",
