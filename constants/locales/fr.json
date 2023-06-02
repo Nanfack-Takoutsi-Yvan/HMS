@@ -1,3 +1,48 @@
 {
-  
+  "common": {
+    "yes": "Oui",
+    "no": "No",
+    "week": {
+      "monday": "Lundi",
+      "tuesday": "Mardi",
+      "wednesday": "Mercredi",
+      "thursday": "Jeudi",
+      "friday": "Vendredi",
+      "saturday": "Samedi",
+      "sunday": "Dimance"
+    },
+    "specialties": {
+      "ophthalmologist": "ophthalmologue"
+    },
+    "amount": "Montant",
+    "submit": "Valider",
+    "start": "Début",
+    "end": "Fin"
+  },
+  "availabilities": {
+    "tab": "Programmes",
+    "title": "Programme de consultation",
+    "available?": "Disponible ?",
+    "onSite": "Presentiel",
+    "remote": "À distance"
+  },
+  "settings": {
+    "tab": "Paramètres"
+  },
+  "modal": {
+    "title": "Nouveau Prog. de consult",
+    "consignPlaceholder": "Entrez votre texte",
+    "consign": "Consigne",
+    "switchSectionTitle": "Activer les rendez vous",
+    "switchSectionDescription": "Durée de 20 mins vec 20 mins de pause apres 6 patients",
+    "calendarSectionTitle": "Choisir les jours de consultation",
+    "timeSectionTitle": "Choisir la plage horaite de consultation",
+    "priceSectionTitle": "Coûts de consultation",
+    "consultancyTypeSectionTitle": "Type de consultation",
+    "consultancyLocation": "Lieu de la consultation"
+  },
+  "consign": {
+    "title": "Saisir consigne",
+    "save": "Enregistrer"
+  }
 }

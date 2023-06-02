@@ -37,7 +37,7 @@
   "scopes": {
   	"app": {},
     "library": {},
-    "authentication": {},
+    "ui": {},
     "settings": {}
   }
 }
