@@ -1,4 +1,4 @@
-import BookingCard from "@components/BookingCard"
+import AppointmentCard from "@components/AppointmentCard"
 import AppStateContext from "@services/context"
 import { useContext } from "react"
 import { StyleSheet, View, ScrollView, FlatList } from "react-native"
@@ -33,10 +33,11 @@ export default function TabOneScreen() {
 
       {!loading && (
         <FlatList
-          data={sortedAppointments}
-          contentContainerStyle={{ rowGap: 16 }}
-          renderItem={data => <BookingCard info={data.item} />}
+          data={appointments}
           keyExtractor={item => item.id}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ rowGap: 16 }}
+          renderItem={data => <AppointmentCard info={data.item} />}
         />
       )}
 

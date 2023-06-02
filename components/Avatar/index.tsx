@@ -6,7 +6,7 @@ const Avatar: FC<AvatarProps> = ({ title, subtitle }) => (
   <View style={styles.container}>
     <PaperAvatar.Image
       size={36}
-      source={require("../../assets/images/icon.png")}
+      source={require("../../assets/profile/doctor.webp")}
     />
     <View>
       <Text variant="bodyLarge"> {title} </Text>

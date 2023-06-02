@@ -8,7 +8,7 @@ import { StyleSheet, View } from "react-native"
 import { Avatar, Switch, Text, Divider, useTheme } from "react-native-paper"
 import Icon from "react-native-paper/src/components/Icon"
 
-const BookingCard: FC<BookingCardProps> = ({
+const AppointmentCard: FC<AppointmentCardProps> = ({
   info: { location, consign, price, startTime, endTime, activate, days, type }
 }) => {
   const { locale } = useContext(AppStateContext)
@@ -141,4 +141,4 @@ const styles = StyleSheet.create({
   switch: { transform: [{ scaleX: 0.5 }, { scaleY: 0.5 }] }
 })
 
-export default BookingCard
+export default AppointmentCard

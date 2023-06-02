@@ -36,7 +36,7 @@ import createAppointmentSchema from "@services/validation/createAppointmentSchem
 export default function ModalScreen() {
   const [selected, setSelected] = useState([])
 
-  const { locale } = useContext(AppStateContext)
+  const { locale, setLoading } = useContext(AppStateContext)
   const { colors } = useTheme()
   const router = useRouter()
   const { consign } = useLocalSearchParams() as { consign: string }
@@ -82,11 +82,14 @@ export default function ModalScreen() {
       type
     } as IAppointment)
 
+    setLoading(true)
+    router.push("loadingModal")
     appointment
       .save()
       .catch(err => console.log(err))
       .finally(() => {
-        router.push("(tabs)")
+        setLoading(false)
+        setTimeout(() => router.push("(tabs)"), 1200)
       })
   }
 
@@ -101,7 +104,7 @@ export default function ModalScreen() {
           <View style={styles.container}>
             <View style={styles.header}>
               <Text variant="titleLarge">{locale.t("modal.title")}</Text>
-              <IconButton icon="close" onPress={() => router.push("../")} />
+              <IconButton icon="close" onPress={() => router.back()} />
             </View>
             <ScrollView
               style={styles.screen}
@@ -362,7 +365,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingVertical: 12
+    paddingTop: Platform.OS === "android" ? 24 : 12,
+    paddingBottom: 12
   },
   title: {
     fontSize: 20,

@@ -3,7 +3,6 @@ import { PaperProvider } from "react-native-paper"
 import { useFonts } from "expo-font"
 import { SplashScreen, Stack } from "expo-router"
 import { useEffect, useMemo, useState } from "react"
-import { useColorScheme } from "react-native"
 import * as localization from "expo-localization"
 
 import useLocales from "@hooks/locale/useTranslation"
@@ -58,15 +57,15 @@ function RootLayoutNav() {
   }, [appointments])
 
   const contextValue = useMemo(
-    () => ({ setLocale, locale: i18n, appointments, loading }),
-    [i18n, setLocale, appointments, loading]
+    () => ({ setLocale, locale: i18n, appointments, loading, setLoading }),
+    [i18n, setLocale, appointments, loading, setLoading]
   )
 
   return (
     <AppStateContext.Provider value={contextValue}>
       <PaperProvider>
         <Stack screenOptions={{ headerShown: false }} initialRouteName="(tabs)">
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" />
           <Stack.Screen
             name="modal"
             options={{ presentation: "containedModal" }}
@@ -74,6 +73,10 @@ function RootLayoutNav() {
           <Stack.Screen
             name="consign"
             options={{ presentation: "containedModal" }}
+          />
+          <Stack.Screen
+            name="loadingModal"
+            options={{ presentation: "containedTransparentModal" }}
           />
         </Stack>
       </PaperProvider>

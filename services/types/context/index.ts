@@ -7,4 +7,5 @@ export default interface AppContextProps {
   setLocale: React.Dispatch<React.SetStateAction<string>>
   appointments?: Appointment[]
   loading: boolean
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }

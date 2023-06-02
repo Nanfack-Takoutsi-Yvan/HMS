@@ -89,7 +89,9 @@ export default class Appointment implements IAppointment {
 
     const controller = new AppointmentController()
 
-    await controller.saveAppointment(payload)
+    const docId = await controller.saveAppointment(payload)
+
+    return docId
   }
 
   @Exclude()
