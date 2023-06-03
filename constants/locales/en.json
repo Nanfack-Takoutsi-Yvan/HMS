@@ -1,4 +1,8 @@
 {
+  "hospitals": {
+    "sjdh-euos": "Bafoussam Regional Hospital",
+    "hsex-elsy": "Padre Pio Hospital"
+  },
   "common": {
     "yes": "Yes",
     "no": "No",
@@ -39,7 +43,13 @@
     "timeSectionTitle": "Select Consultancy time slot",
     "priceSectionTitle": "Consultancy costs",
     "consultancyTypeSectionTitle": "Consultancy type",
-    "consultancyLocation": "Consultancy location"
+    "consultancyLocation": "Consultancy location",
+    "select": "Select an option",
+    "errors": {
+      "amount": "An amount is required to submit the form",
+      "location": "You must select a location to submit the form",
+      "type": "You must select consultancy type to submit the form"
+    }
   },
   "consign": {
     "title": "Enter consign",

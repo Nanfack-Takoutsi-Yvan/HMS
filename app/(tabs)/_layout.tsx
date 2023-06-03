@@ -29,7 +29,10 @@ export default function TabLayout() {
           headerLeft: () => (
             <View style={styles.avatarContainer}>
               <IconButton icon="arrow-left" style={styles.iconButton} />
-              <Avatar title="Dr Patrick James" subtitle="Ophthalmologist" />
+              <Avatar
+                title="Dr Patrick James"
+                subtitle={locale.t("common.specialties.ophthalmologist")}
+              />
             </View>
           )
         }}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "268670967638",
+    "project_id": "hospial-management-system",
+    "storage_bucket": "hospial-management-system.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268670967638:android:48cfcf24a0100be98040f7",
+        "android_client_info": {
+          "package_name": "com.yvanov.hms"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0jDFgH92wT3mQj2_H5w4vU_v_4r_0TGU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

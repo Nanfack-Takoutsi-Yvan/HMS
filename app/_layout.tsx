@@ -2,12 +2,12 @@ import FontAwesome from "@expo/vector-icons/FontAwesome"
 import { PaperProvider } from "react-native-paper"
 import { useFonts } from "expo-font"
 import { SplashScreen, Stack } from "expo-router"
-import { useEffect, useMemo } from "react"
-import { useColorScheme } from "react-native"
+import { useEffect, useMemo, useState } from "react"
 import * as localization from "expo-localization"
 
 import useLocales from "@hooks/locale/useTranslation"
 import AppStateContext from "@services/context"
+import Appointment from "@services/models/appointment"
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -40,19 +40,32 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme()
+  const [appointments, setAppointments] = useState<Appointment[]>()
+  const [loading, setLoading] = useState<boolean>(true)
+
   const { i18n, setLocale } = useLocales(localization.locale)
 
+  useEffect(() => {
+    const unsubscribe = Appointment.getAllAppointments(setAppointments)
+    return () => unsubscribe()
+  }, [])
+
+  useEffect(() => {
+    if (appointments) {
+      setLoading(false)
+    }
+  }, [appointments])
+
   const contextValue = useMemo(
-    () => ({ setLocale, locale: i18n }),
-    [i18n, setLocale]
+    () => ({ setLocale, locale: i18n, appointments, loading, setLoading }),
+    [i18n, setLocale, appointments, loading, setLoading]
   )
 
   return (
     <AppStateContext.Provider value={contextValue}>
       <PaperProvider>
         <Stack screenOptions={{ headerShown: false }} initialRouteName="(tabs)">
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" />
           <Stack.Screen
             name="modal"
             options={{ presentation: "containedModal" }}
@@ -60,6 +73,10 @@ function RootLayoutNav() {
           <Stack.Screen
             name="consign"
             options={{ presentation: "containedModal" }}
+          />
+          <Stack.Screen
+            name="loadingModal"
+            options={{ presentation: "containedTransparentModal" }}
           />
         </Stack>
       </PaperProvider>

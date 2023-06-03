@@ -8,11 +8,15 @@ import { StyleSheet, View } from "react-native"
 import { Avatar, Switch, Text, Divider, useTheme } from "react-native-paper"
 import Icon from "react-native-paper/src/components/Icon"
 
-const BookingCard: FC<BookingCardProps> = ({
-  info: { hospitalName, consign, price, startTime, endTime, isAvailable }
+const AppointmentCard: FC<AppointmentCardProps> = ({
+  info: { location, consign, price, startTime, endTime, activate, days, type }
 }) => {
   const { locale } = useContext(AppStateContext)
   const { colors } = useTheme()
+
+  const isAvailable = `${activate}` === "true"
+  const hospitals = location.split(",")
+  const text = consign?.replace(/<[^>]+>/g, "")
 
   return (
     <View style={styles.card}>
@@ -39,16 +43,18 @@ const BookingCard: FC<BookingCardProps> = ({
         <View style={styles.cardContentHeader}>
           <Avatar.Text
             size={32}
-            label={hospitalName[0]}
+            label={locale.t(`hospitals.${hospitals[0]}`)[0]}
             style={{ backgroundColor: colors.tertiary }}
           />
-          <Text variant="titleMedium">{hospitalName}</Text>
+          <Text variant="titleMedium">
+            {locale.t(`hospitals.${hospitals[0]}`)}
+          </Text>
         </View>
 
         <View style={styles.cardBody}>
           <View style={styles.cardContentBodyPlaceTime}>
             <Text variant="titleSmall" style={{ color: colors.primary }}>
-              {locale.t("availabilities.onSite")}
+              {locale.t(`availabilities.${type}`)}
             </Text>
             <Text>
               {getTime(startTime)} - {getTime(endTime)}
@@ -62,10 +68,10 @@ const BookingCard: FC<BookingCardProps> = ({
         </View>
 
         <View style={styles.cardContentFooter}>
-          <CalendarDays format={DATE_FORMAT.SHORT} />
+          <CalendarDays format={DATE_FORMAT.SHORT} value={days} />
           <View>
             <Text variant="titleMedium">
-              {formatNumber(price, locale.locale)} xaf
+              {formatNumber(price!, locale.locale)} xaf
             </Text>
           </View>
         </View>
@@ -75,7 +81,7 @@ const BookingCard: FC<BookingCardProps> = ({
           <Divider />
           <View style={[styles.cardFooter, styles.padding]}>
             <Text numberOfLines={2} ellipsizeMode="tail">
-              {consign}
+              {text}
             </Text>
           </View>
         </>
@@ -135,4 +141,4 @@ const styles = StyleSheet.create({
   switch: { transform: [{ scaleX: 0.5 }, { scaleY: 0.5 }] }
 })
 
-export default BookingCard
+export default AppointmentCard

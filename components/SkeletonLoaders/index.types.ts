@@ -1,0 +1,3 @@
+type SkeletonProps = {
+  number?: number
+}

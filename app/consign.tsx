@@ -7,164 +7,114 @@ import {
   KeyboardAvoidingView,
   ScrollView
 } from "react-native"
-import { IconButton, Text, Button, useTheme } from "react-native-paper"
-import {
-  RichTextEditor,
-  ActionMap,
-  ActionKey,
-  RichTextToolbar
-} from "@siposdani87/expo-rich-text-editor"
-import { useContext, useState } from "react"
-import { useRouter } from "expo-router"
-import Icon from "react-native-paper/src/components/Icon"
-import useKeyboardVisible from "@hooks/keyboard/useKeyboardVisible"
+import { Button, IconButton, Text, useTheme } from "react-native-paper"
+import { actions, RichEditor, RichToolbar } from "react-native-pell-rich-editor"
+
+import { useContext, useEffect, useRef, useState } from "react"
+import { useRouter, useLocalSearchParams } from "expo-router"
 import AppStateContext from "@services/context"
 
 export default function ModalScreen() {
   const [value, setValue] = useState<string>("")
-  const [selectedActions, setSelectedActions] = useState<ActionKey[]>([])
+  const richText = useRef<RichEditor>(null)
 
   const router = useRouter()
   const { colors } = useTheme()
-  const { isKeyboardVisible } = useKeyboardVisible()
   const { locale } = useContext(AppStateContext)
+  const params = useLocalSearchParams() as { consign: string }
 
-  const getActionMap = () => ({
-    [ActionKey.bold]: ({ selected }: { selected: boolean }) => (
-      <View style={[styles.toolbarAction, selected && styles.actionSelected]}>
-        <Icon source="format-bold" size={24} />
-      </View>
-    ),
-    [ActionKey.italic]: ({ selected }: { selected: boolean }) => (
-      <View style={[styles.toolbarAction, selected && styles.actionSelected]}>
-        <Icon source="format-italic" size={24} />
-      </View>
-    ),
-    [ActionKey.unorderedList]: ({ selected }: { selected: boolean }) => (
-      <View style={[styles.toolbarAction, selected && styles.actionSelected]}>
-        <Icon source="format-list-bulleted" size={24} />
-      </View>
-    )
-  })
-
-  const handleActionsKeys = (key: ActionKey) => {
-    if (selectedActions.includes(key)) {
-      setSelectedActions(oldValue => oldValue.filter(el => el !== key))
-    } else {
-      setSelectedActions(oldValue => [...oldValue, key])
+  useEffect(() => {
+    if (params.consign) {
+      setValue(params.consign)
     }
-  }
-
-  const onValueChange = (v: string): void => {
-    console.log("onValueChange", v)
-    setValue(v)
-  }
+  }, [params])
 
   return (
-    <View style={styles.container}>
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+    <View style={styles.screen}>
+      <StatusBar style={Platform.OS === "ios" ? "dark" : "auto"} />
       <SafeAreaView style={styles.screen}>
-        <View style={styles.screen}>
-          <View style={styles.editorContainer}>
-            <Text variant="titleLarge">{locale.t("consign.title")}</Text>
-            <IconButton icon="close" onPress={() => router.push("../")} />
-          </View>
-          <KeyboardAvoidingView
-            style={styles.screen}
-            contentContainerStyle={styles.screen}
-            behavior={Platform.OS === "ios" ? "height" : undefined}
-          >
-            <View style={styles.screen}>
-              <ScrollView
-                style={styles.screen}
-                contentContainerStyle={styles.padding}
-              >
-                <View style={styles.screen}>
-                  <RichTextEditor
-                    minHeight={150}
-                    value={value}
-                    selectionColor={colors.primary}
-                    onValueChange={onValueChange}
-                    editorStyle={styles.editor}
-                    actionMap={getActionMap() as unknown as ActionMap}
-                  />
-                </View>
-              </ScrollView>
-
-              {isKeyboardVisible && (
-                <View style={styles.toolbarContainer}>
-                  <RichTextToolbar
-                    actionMap={getActionMap() as unknown as ActionMap}
-                    selectedActionKeys={selectedActions}
-                    onPress={handleActionsKeys}
-                    style={styles.toolbar}
-                  />
-                  <Button mode="text" onPress={() => undefined}>
-                    {locale.t("consign.save")}
-                  </Button>
-                </View>
-              )}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.screen}
+          contentContainerStyle={styles.screen}
+        >
+          <View style={styles.container}>
+            <View style={styles.header}>
+              <Text variant="titleLarge">{locale.t("consign.title")}</Text>
+              <IconButton
+                icon="close"
+                onPress={() => {
+                  router.back()
+                  setValue("")
+                }}
+              />
             </View>
-          </KeyboardAvoidingView>
-        </View>
+            <ScrollView style={styles.screen}>
+              <View style={styles.screen}>
+                <RichEditor
+                  ref={richText}
+                  style={styles.screen}
+                  containerStyle={styles.screen}
+                  onChange={setValue}
+                  editorStyle={{ caretColor: colors.primary }}
+                  initialFocus
+                  initialContentHTML={value}
+                  placeholder={locale.t("consign.title")}
+                />
+              </View>
+            </ScrollView>
+          </View>
+          <View style={styles.toolbarContainer}>
+            <RichToolbar
+              editor={richText}
+              actions={[
+                actions.setBold,
+                actions.setItalic,
+                actions.setUnderline,
+                actions.insertBulletsList
+              ]}
+              style={styles.toolbar}
+            />
+            <Button
+              onPress={() => {
+                router.push({ pathname: "modal", params: { consign: value } })
+                setValue("")
+              }}
+              mode="text"
+            >
+              {locale.t("consign.save")}
+            </Button>
+          </View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1
-  },
   container: {
+    flex: 1,
+    paddingHorizontal: 24,
+    paddingVertical: Platform.OS === "ios" ? 12 : 24
+  },
+  screen: {
     flex: 1,
     backgroundColor: "#fff"
   },
-  padding: {
-    flex: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 12
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold"
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%"
-  },
-  editorContainer: {
+  header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 14,
-    paddingHorizontal: 12
+    alignItems: "center"
   },
-  editor: {
-    fontSize: 16
+  toolbar: {
+    backgroundColor: "transparent"
   },
   toolbarContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "rgba(230,230,230, 0.5)",
-    paddingHorizontal: 12
-  },
-  toolbar: {
-    alignItems: "baseline",
-    flexDirection: "row",
-    flex: 1,
-    rowGap: 4
-  },
-  toolbarAction: {
-    minHeight: 36,
-    minWidth: 36,
-    borderRadius: 4,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  actionSelected: {
-    backgroundColor: "rgb(220,220,220)"
+    paddingHorizontal: 24,
+    paddingVertical: 4,
+    backgroundColor: "rgba(30, 30, 30, 0.1)"
   }
 })

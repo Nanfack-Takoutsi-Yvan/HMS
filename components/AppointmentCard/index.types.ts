@@ -1,4 +1,4 @@
 /* eslint-disable */
-type BookingCardProps = {
+type AppointmentCardProps = {
   info: IAppointment
 }

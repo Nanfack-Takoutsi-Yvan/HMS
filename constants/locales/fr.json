@@ -1,4 +1,8 @@
 {
+  "hospitals": {
+    "sjdh-euos": "Hôpital régional de Bafoussam",
+    "hsex-elsy": "Hôpital Padre Pio"
+  },
   "common": {
     "yes": "Oui",
     "no": "No",
@@ -39,7 +43,13 @@
     "timeSectionTitle": "Choisir la plage horaite de consultation",
     "priceSectionTitle": "Coûts de consultation",
     "consultancyTypeSectionTitle": "Type de consultation",
-    "consultancyLocation": "Lieu de la consultation"
+    "consultancyLocation": "Lieu de la consultation",
+    "select": "Sélectionner une option",
+    "errors": {
+      "amount": "Le montant est requi pour valider le formulaire",
+      "location": "Vous devez selectionner au moins un hopital pour valider le formulaire",
+      "type": "vous devez preciser le type de consultation pour valider le formulaire"
+    }
   },
   "consign": {
     "title": "Saisir consigne",
