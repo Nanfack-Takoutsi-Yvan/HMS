@@ -32,6 +32,7 @@ import {
 import Icon from "react-native-paper/src/components/Icon"
 import { RichTextViewer } from "@siposdani87/expo-rich-text-editor"
 import createAppointmentSchema from "@services/validation/createAppointmentSchema"
+import * as Haptics from "expo-haptics"
 
 export default function ModalScreen() {
   const [selected, setSelected] = useState([])
@@ -86,7 +87,12 @@ export default function ModalScreen() {
     router.push("loadingModal")
     appointment
       .save()
-      .catch(err => console.log(err))
+      .then(() =>
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+      )
+      .catch(() =>
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+      )
       .finally(() => {
         setLoading(false)
         setTimeout(() => router.push("(tabs)"), 1200)

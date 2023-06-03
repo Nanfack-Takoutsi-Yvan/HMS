@@ -8,6 +8,7 @@ import * as localization from "expo-localization"
 import useLocales from "@hooks/locale/useTranslation"
 import AppStateContext from "@services/context"
 import Appointment from "@services/models/appointment"
+import * as Haptics from "expo-haptics"
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -53,6 +54,7 @@ function RootLayoutNav() {
   useEffect(() => {
     if (appointments) {
       setLoading(false)
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning)
     }
   }, [appointments])
 
