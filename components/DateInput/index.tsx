@@ -5,6 +5,7 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker"
 import { Text, useTheme } from "react-native-paper"
 import { getTime } from "@services/utils/dateTime"
+import * as Haptics from "expo-haptics"
 
 const DateInput: FC<DateInput> = ({ label, value, onChange }) => {
   const [date, setDate] = useState<Date>(new Date("2023-06-01T04:00:00.000Z"))
@@ -28,6 +29,7 @@ const DateInput: FC<DateInput> = ({ label, value, onChange }) => {
 
   const showTimepicker = () => {
     setShow(true)
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
   }
 
   useEffect(() => {

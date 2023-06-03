@@ -3,6 +3,7 @@ import AppStateContext from "@services/context"
 import { FC, useContext, useEffect, useState } from "react"
 import { Text, useTheme } from "react-native-paper"
 import { StyleSheet, TouchableOpacity } from "react-native"
+import * as Haptics from "expo-haptics"
 import { DATE_FORMAT } from "./__index.utils"
 import { CalendarDaysProps, CalendarDaysType, Days } from "./index.types"
 
@@ -26,6 +27,7 @@ const CalendarDays: FC<CalendarDaysProps> = ({
 
     if (onChange) {
       onChange(days.toString())
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
     }
   }
 
