@@ -95,7 +95,7 @@ export default function ModalScreen() {
       )
       .finally(() => {
         setLoading(false)
-        setTimeout(() => router.push("(tabs)"), 1200)
+        setTimeout(() => router.push("(tabs)"))
       })
   }
 
