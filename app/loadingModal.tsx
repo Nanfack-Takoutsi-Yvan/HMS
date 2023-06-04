@@ -10,7 +10,7 @@ export default function LoadingModalScreen() {
 
   useEffect(() => {
     if (!loading) {
-      setTimeout(() => router.back(), 300)
+      router.back()
     }
   }, [loading, router])
 

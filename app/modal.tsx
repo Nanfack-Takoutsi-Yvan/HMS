@@ -95,7 +95,7 @@ export default function ModalScreen() {
       )
       .finally(() => {
         setLoading(false)
-        setTimeout(() => router.push("(tabs)"), 1200)
+        setTimeout(() => router.push("(tabs)"))
       })
   }
 
@@ -105,6 +105,7 @@ export default function ModalScreen() {
       <KeyboardAvoidingView
         style={styles.screen}
         contentContainerStyle={styles.screen}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <SafeAreaView style={styles.screen}>
           <View style={styles.container}>
