@@ -21,7 +21,10 @@
     "amount": "Amount",
     "submit": "Submit",
     "start": "Start",
-    "end": "End"
+    "end": "End",
+    "en": "English",
+    "fr": "Francais",
+    "language": "Language"
   },
   "availabilities": {
     "tab": "Programs",
@@ -31,7 +34,8 @@
     "remote": "Remote"
   },
   "settings": {
-    "tab": "Settings"
+    "tab": "Settings",
+    "selectLanguage": "Select Language"
   },
   "modal": {
     "title": "New Consultancy Prog.",
