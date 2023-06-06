@@ -7,7 +7,8 @@ const AppStateContext = createContext<AppContextProps>({
   setLocale: () => null,
   appointments: undefined,
   loading: true,
-  setLoading: () => null
+  setLoading: () => null,
+  isDarkTheme: false
 })
 
 export default AppStateContext

@@ -1,26 +1,35 @@
 import { useRouter } from "expo-router"
 import { useContext } from "react"
-import { StyleSheet, View, ScrollView } from "react-native"
-import { Avatar, Text, Card } from "react-native-paper"
+import { StyleSheet, ScrollView } from "react-native"
+import { Avatar, Text, Card, useTheme } from "react-native-paper"
 
 import AppStateContext from "@services/context"
 import layout from "@constants/layout"
+import { View } from "@components/Themed"
 
 export default function TabTwoScreen() {
   const router = useRouter()
-  const { locale } = useContext(AppStateContext)
+  const { locale, isDarkTheme } = useContext(AppStateContext)
+  const { colors } = useTheme()
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor: isDarkTheme ? colors.background : "transparent"
+      }}
+    >
       <ScrollView style={styles.screen}>
         <View style={styles.screen}>
           <Card
             onPress={() => router.push("language")}
             mode="contained"
-            style={styles.card}
+            style={{
+              backgroundColor: isDarkTheme ? "#555" : "#fff"
+            }}
           >
             <Card.Content style={styles.cardContent}>
-              <View>
+              <View style={{ backgroundColor: "transparent" }}>
                 <Avatar.Icon
                   color="#000"
                   icon="translate"
@@ -45,9 +54,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: layout.spacing.paddings.big,
     paddingVertical: layout.spacing.paddings.small
-  },
-  card: {
-    backgroundColor: "#fff"
   },
   cardContent: {
     flexDirection: "row",

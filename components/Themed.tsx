@@ -1,38 +1,19 @@
+/* eslint-disable import/prefer-default-export */
 /**
  * Learn more about Light and Dark modes:
  * https://docs.expo.io/guides/color-schemes/
  */
 
-import { useColorScheme, View as DefaultView } from "react-native"
+import { View as DefaultView, ViewProps } from "react-native"
+import { useTheme } from "react-native-paper/src/core/theming"
 
-import Colors from "../constants/Colors"
+export function View({ style, ...otherProps }: ViewProps) {
+  const { colors } = useTheme()
 
-export function useThemeColor(
-  props: { light?: string; dark?: string },
-  colorName: keyof typeof Colors.light & keyof typeof Colors.dark
-) {
-  const theme = useColorScheme() ?? "light"
-  const colorFromProps = props[theme]
-
-  if (colorFromProps) {
-    return colorFromProps
-  }
-  return Colors[theme][colorName]
-}
-
-type ThemeProps = {
-  lightColor?: string
-  darkColor?: string
-}
-
-export type ViewProps = ThemeProps & DefaultView["props"]
-
-export function View(props: ViewProps) {
-  const { style, lightColor, darkColor, ...otherProps } = props
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "background"
+  return (
+    <DefaultView
+      style={[{ backgroundColor: colors.background }, style]}
+      {...otherProps}
+    />
   )
-
-  return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />
 }

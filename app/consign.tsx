@@ -2,7 +2,6 @@ import { StatusBar } from "expo-status-bar"
 import {
   Platform,
   StyleSheet,
-  View,
   SafeAreaView,
   KeyboardAvoidingView,
   ScrollView
@@ -14,6 +13,7 @@ import { useRouter, useLocalSearchParams } from "expo-router"
 
 import AppStateContext from "@services/context"
 import layout from "@constants/layout"
+import { View } from "@components/Themed"
 
 export default function ModalScreen() {
   const [value, setValue] = useState<string>("")
@@ -21,7 +21,7 @@ export default function ModalScreen() {
 
   const router = useRouter()
   const { colors } = useTheme()
-  const { locale } = useContext(AppStateContext)
+  const { locale, isDarkTheme } = useContext(AppStateContext)
   const params = useLocalSearchParams() as { consign: string }
 
   useEffect(() => {
@@ -50,14 +50,22 @@ export default function ModalScreen() {
                 }}
               />
             </View>
-            <ScrollView style={styles.screen}>
+            <ScrollView
+              style={{
+                ...styles.screen,
+                backgroundColor: colors.background
+              }}
+            >
               <View style={styles.screen}>
                 <RichEditor
                   ref={richText}
                   style={styles.screen}
                   containerStyle={styles.screen}
                   onChange={setValue}
-                  editorStyle={{ caretColor: colors.primary }}
+                  editorStyle={{
+                    caretColor: colors.primary,
+                    backgroundColor: colors.background
+                  }}
                   initialFocus
                   initialContentHTML={value}
                   placeholder={locale.t("consign.title")}
@@ -65,7 +73,14 @@ export default function ModalScreen() {
               </View>
             </ScrollView>
           </View>
-          <View style={styles.toolbarContainer}>
+          <View
+            style={{
+              ...styles.toolbarContainer,
+              backgroundColor: isDarkTheme
+                ? "rgba(10, 10, 10, 0.7)"
+                : "rgba(30, 30, 30, 0.1)"
+            }}
+          >
             <RichToolbar
               editor={richText}
               actions={[
@@ -102,8 +117,7 @@ const styles = StyleSheet.create({
         : layout.spacing.paddings.big
   },
   screen: {
-    flex: 1,
-    backgroundColor: "#fff"
+    flex: 1
   },
   header: {
     flexDirection: "row",
@@ -118,7 +132,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: layout.spacing.paddings.big,
-    paddingVertical: layout.spacing.paddings.xSmall,
-    backgroundColor: "rgba(30, 30, 30, 0.1)"
+    paddingVertical: layout.spacing.paddings.xSmall
   }
 })

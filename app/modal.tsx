@@ -1,3 +1,5 @@
+/* eslint-disable react/style-prop-object */
+/* eslint-disable no-nested-ternary */
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { useContext, useEffect, useState } from "react"
 import { StatusBar } from "expo-status-bar"
@@ -11,7 +13,6 @@ import {
 } from "react-native-paper"
 import { Formik, useFormikContext } from "formik"
 import {
-  View,
   Platform,
   ScrollView,
   StyleSheet,
@@ -34,11 +35,12 @@ import { DATE_FORMAT } from "@components/CalendarDays/__index.utils"
 import DateInput from "@components/DateInput/index"
 import { RichTextViewer } from "@siposdani87/expo-rich-text-editor"
 import createAppointmentSchema from "@services/validation/createAppointmentSchema"
+import { View } from "@components/Themed"
 
 export default function ModalScreen() {
   const [selected, setSelected] = useState<string[]>([])
 
-  const { locale, setLoading } = useContext(AppStateContext)
+  const { locale, setLoading, isDarkTheme } = useContext(AppStateContext)
   const { colors } = useTheme()
   const router = useRouter()
   const { consign } = useLocalSearchParams() as { consign: string }
@@ -101,8 +103,8 @@ export default function ModalScreen() {
   }
 
   return (
-    <>
-      <StatusBar style={Platform.OS === "ios" ? "dark" : "auto"} />
+    <View style={styles.screen}>
+      <StatusBar style="auto" />
       <KeyboardAvoidingView
         style={styles.screen}
         contentContainerStyle={styles.screen}
@@ -115,7 +117,7 @@ export default function ModalScreen() {
               <IconButton icon="close" onPress={() => router.back()} />
             </View>
             <ScrollView
-              style={styles.screen}
+              style={[styles.screen, { backgroundColor: colors.background }]}
               showsVerticalScrollIndicator={false}
             >
               <Formik
@@ -140,7 +142,9 @@ export default function ModalScreen() {
                             borderColor:
                               errors.type && touched.type
                                 ? colors.error
-                                : "rgba(0,0,0,0.08)"
+                                : isDarkTheme
+                                ? "rgba(230,230,230,0.5)"
+                                : "rgba(30,30,30,0.1)"
                           }
                         ]}
                       >
@@ -157,9 +161,20 @@ export default function ModalScreen() {
                           save="key"
                           search={false}
                           boxStyles={styles.selectInput}
-                          dropdownStyles={styles.dropDown}
+                          dropdownStyles={{
+                            ...styles.dropDown,
+                            borderTopColor: isDarkTheme
+                              ? "rgba(230,230,230,0.5)"
+                              : "rgba(30,30,30,0.1)"
+                          }}
                           dropdownItemStyles={styles.dropDownItem}
                           placeholder={locale.t("modal.select")}
+                          inputStyles={{
+                            color: isDarkTheme ? "#fff" : undefined
+                          }}
+                          dropdownTextStyles={{
+                            color: isDarkTheme ? "#fff" : undefined
+                          }}
                           arrowicon={
                             <Icon
                               source="chevron-down"
@@ -184,9 +199,11 @@ export default function ModalScreen() {
                           styles.consignView,
                           {
                             borderColor:
-                              errors.location && touched.location
+                              errors.type && touched.type
                                 ? colors.error
-                                : "rgba(0,0,0,0.08)"
+                                : isDarkTheme
+                                ? "rgba(230,230,230,0.5)"
+                                : "rgba(30,30,30,0.1)"
                           }
                         ]}
                       >
@@ -204,12 +221,22 @@ export default function ModalScreen() {
                           dropdownStyles={styles.dropDown}
                           dropdownItemStyles={styles.dropDownItem}
                           label={locale.t("modal.consultancyLocation")}
-                          labelStyles={{ fontSize: 12 }}
+                          labelStyles={{
+                            fontSize: 12,
+                            color: isDarkTheme ? "#fff" : undefined
+                          }}
                           placeholder="select location"
+                          inputStyles={{
+                            color: isDarkTheme ? "#fff" : undefined
+                          }}
+                          dropdownTextStyles={{
+                            color: isDarkTheme ? "#fff" : undefined
+                          }}
                           badgeStyles={{
                             backgroundColor: colors.primary,
                             borderRadius: 6
                           }}
+                          search={false}
                         />
                       </View>
 
@@ -222,7 +249,19 @@ export default function ModalScreen() {
                       )}
                     </View>
 
-                    <View style={styles.consignView}>
+                    <View
+                      style={[
+                        styles.consignView,
+                        {
+                          borderColor:
+                            errors.type && touched.type
+                              ? colors.error
+                              : isDarkTheme
+                              ? "rgba(230,230,230,0.5)"
+                              : "rgba(30,30,30,0.1)"
+                        }
+                      ]}
+                    >
                       <View>
                         <Text variant="titleMedium">
                           {locale.t("modal.consign")}
@@ -249,7 +288,12 @@ export default function ModalScreen() {
                           )}
 
                           {!!consign && (
-                            <RichTextViewer viewerStyle={{}} value={consign} />
+                            <RichTextViewer
+                              viewerStyle={{
+                                color: isDarkTheme ? "#fff" : undefined
+                              }}
+                              value={consign}
+                            />
                           )}
                         </TouchableOpacity>
                       </View>
@@ -334,7 +378,7 @@ export default function ModalScreen() {
                           keyboardType="numeric"
                           autoComplete="off"
                           right={<TextInput.Affix text="xaf" />}
-                          style={styles.field}
+                          style={!isDarkTheme && styles.field}
                           outlineStyle={styles.fieldOutline}
                           error={!!errors.price && touched.price}
                           dense
@@ -366,14 +410,13 @@ export default function ModalScreen() {
           </View>
         </SafeAreaView>
       </KeyboardAvoidingView>
-    </>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
-    backgroundColor: "#fff"
+    flex: 1
   },
   container: {
     flex: 1,
@@ -432,7 +475,6 @@ const styles = StyleSheet.create({
   },
   dropDown: {
     borderColor: "transparent",
-    borderTopColor: "rgba(30,30,30,0.1)",
     borderRadius: layoutConstants.border.radius.null
   },
   dropDownItem: {

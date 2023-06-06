@@ -1,8 +1,15 @@
-import AppStateContext from "@services/context"
+/* eslint-disable no-nested-ternary */
 import { FC, useContext, useEffect, useState } from "react"
 import { Text, useTheme } from "react-native-paper"
-import { StyleSheet, TouchableOpacity, View } from "react-native"
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  useColorScheme
+} from "react-native"
 import * as Haptics from "expo-haptics"
+
+import AppStateContext from "@services/context"
 import { DATE_FORMAT } from "./__index.utils"
 import { CalendarDaysProps, CalendarDaysType, Days } from "./index.types"
 
@@ -18,6 +25,9 @@ const CalendarDays: FC<CalendarDaysProps> = ({
 
   const { colors } = useTheme()
   const { locale } = useContext(AppStateContext)
+  const theme = useColorScheme()
+
+  const isDarkTheme = theme === "dark"
 
   const selectADay = (day: Days) => {
     const days = selectedDays.includes(day)
@@ -64,6 +74,8 @@ const CalendarDays: FC<CalendarDaysProps> = ({
             {
               backgroundColor: selectedDays.includes(day as Days)
                 ? colors.primary
+                : isDarkTheme
+                ? "rgba(230,230,230,0.5)"
                 : "rgba(0,0,0,0.05)"
             }
           ]}
@@ -80,7 +92,11 @@ const CalendarDays: FC<CalendarDaysProps> = ({
                 styles.date,
                 textStyle,
                 {
-                  color: selectedDays.includes(day as Days) ? "#fff" : undefined
+                  color: selectedDays.includes(day as Days)
+                    ? isDarkTheme
+                      ? "#000"
+                      : "#fff"
+                    : undefined
                 }
               ]}
             >

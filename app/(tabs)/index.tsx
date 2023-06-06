@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { StyleSheet, ScrollView, FlatList, View } from "react-native"
+import { StyleSheet, ScrollView, FlatList } from "react-native"
 import { Text, FAB, useTheme } from "react-native-paper"
 import { useRouter } from "expo-router"
 
@@ -7,6 +7,7 @@ import AppointmentCard from "@components/AppointmentCard"
 import SkeletonLoaders from "@components/SkeletonLoaders"
 import AppStateContext from "@services/context"
 import layout from "@constants/layout"
+import { View } from "@components/Themed"
 
 export default function TabOneScreen() {
   const { locale, appointments, loading } = useContext(AppStateContext)
@@ -55,8 +56,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: layout.spacing.paddings.big,
     paddingHorizontal: layout.spacing.paddings.big,
-    rowGap: layout.spacing.rowGap.regular,
-    backgroundColor: "#fff"
+    rowGap: layout.spacing.rowGap.regular
   },
   fab: {
     position: "absolute",

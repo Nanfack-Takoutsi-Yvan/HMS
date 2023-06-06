@@ -1,21 +1,38 @@
 import { FC, useContext } from "react"
-import { StyleSheet, TouchableOpacity, View } from "react-native"
-import { Text } from "react-native-paper"
+import { StyleSheet, TouchableOpacity } from "react-native"
+import { Text, useTheme } from "react-native-paper"
 
 import layout from "@constants/layout"
 import AppStateContext from "@services/context"
+import { View } from "@components/Themed"
 
 const LanguageScreen: FC = () => {
-  const { locale, setLocale } = useContext(AppStateContext)
+  const { locale, setLocale, isDarkTheme } = useContext(AppStateContext)
+  const { colors } = useTheme()
 
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor: !isDarkTheme ? "transparent" : colors.background
+      }}
+    >
+      <View
+        style={{
+          ...styles.card,
+          backgroundColor: isDarkTheme ? "#555" : "#fff"
+        }}
+      >
         <Text variant="titleMedium">{locale.t("common.language")}</Text>
         <Text>{locale.t(`common.${locale.locale.split("-")[0]}`)}</Text>
       </View>
-      <View style={styles.card}>
-        <View>
+      <View
+        style={{
+          ...styles.card,
+          backgroundColor: isDarkTheme ? "#555" : "#fff"
+        }}
+      >
+        <View style={{ backgroundColor: "transparent" }}>
           <Text variant="titleMedium">
             {locale.t("settings.selectLanguage")}
           </Text>
@@ -31,7 +48,7 @@ const LanguageScreen: FC = () => {
               if (locale.locale !== key) setLocale(key)
             }}
           >
-            <View>
+            <View style={{ backgroundColor: "transparent" }}>
               <Text>{locale.t(`common.${key}`)}</Text>
             </View>
           </TouchableOpacity>
@@ -52,7 +69,6 @@ const styles = StyleSheet.create({
     rowGap: layout.spacing.rowGap.regular
   },
   card: {
-    backgroundColor: "#fff",
     paddingHorizontal: layout.spacing.paddings.regular,
     paddingVertical: layout.spacing.paddings.small,
     borderRadius: layout.border.radius.regular,
@@ -63,7 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   selected: {
-    backgroundColor: "rgba(30,30,30,0.1)",
+    backgroundColor: "rgba(230,230,230,0.4)",
     marginHorizontal: -layout.spacing.paddings.regular,
     paddingHorizontal: layout.spacing.paddings.small
   }

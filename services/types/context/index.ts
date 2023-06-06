@@ -8,4 +8,5 @@ export default interface AppContextProps {
   appointments?: Appointment[]
   loading: boolean
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  isDarkTheme: boolean
 }
