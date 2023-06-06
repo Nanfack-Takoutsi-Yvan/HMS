@@ -1,7 +1,9 @@
-import AppStateContext from "@services/context"
 import { FC, useContext } from "react"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 import { Text } from "react-native-paper"
+
+import layout from "@constants/layout"
+import AppStateContext from "@services/context"
 
 const LanguageScreen: FC = () => {
   const { locale, setLocale } = useContext(AppStateContext)
@@ -45,16 +47,16 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    rowGap: 12
+    paddingHorizontal: layout.spacing.paddings.big,
+    paddingVertical: layout.spacing.paddings.small,
+    rowGap: layout.spacing.rowGap.regular
   },
   card: {
     backgroundColor: "#fff",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 12,
-    rowGap: 12
+    paddingHorizontal: layout.spacing.paddings.regular,
+    paddingVertical: layout.spacing.paddings.small,
+    borderRadius: layout.border.radius.regular,
+    rowGap: layout.spacing.rowGap.regular
   },
   languageCard: {
     height: 48,
@@ -62,8 +64,8 @@ const styles = StyleSheet.create({
   },
   selected: {
     backgroundColor: "rgba(30,30,30,0.1)",
-    marginHorizontal: -16,
-    paddingHorizontal: 12
+    marginHorizontal: -layout.spacing.paddings.regular,
+    paddingHorizontal: layout.spacing.paddings.small
   }
 })
 

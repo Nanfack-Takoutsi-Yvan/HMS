@@ -1,10 +1,11 @@
 import CalendarDays from "@components/CalendarDays"
 import { DATE_FORMAT } from "@components/CalendarDays/__index.utils"
+import layout from "@constants/layout"
 import AppStateContext from "@services/context"
 import { getTime } from "@services/utils/dateTime"
 import formatNumber from "@services/utils/formating"
 import { FC, useContext } from "react"
-import { StyleSheet, View } from "react-native"
+import { Platform, StyleSheet, View } from "react-native"
 import { Avatar, Switch, Text, Divider, useTheme } from "react-native-paper"
 import Icon from "react-native-paper/src/components/Icon"
 
@@ -62,7 +63,11 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
           </View>
           {isAvailable && (
             <View style={styles.cardBodyCalendarIcon}>
-              <Icon source="calendar-month" size={24} color={colors.primary} />
+              <Icon
+                source="calendar-month"
+                size={layout.size.icons.small}
+                color={colors.primary}
+              />
             </View>
           )}
         </View>
@@ -92,14 +97,17 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    borderWidth: 1,
-    borderRadius: 15,
+    borderWidth: layout.border.width.regular,
+    borderRadius: layout.border.radius.regular,
     borderColor: "rgba(0, 0, 0, 0.1)",
     backgroundColor: "#fff"
   },
   padding: {
-    paddingHorizontal: 16,
-    paddingVertical: 8
+    paddingHorizontal: layout.spacing.paddings.regular,
+    paddingVertical:
+      Platform.OS === "android"
+        ? layout.spacing.paddings.xSmall
+        : layout.spacing.paddings.xSmall * 2
   },
   cardHeader: {
     flexDirection: "row",
@@ -111,13 +119,13 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   cardContent: {
-    rowGap: 12,
-    paddingBottom: 20
+    rowGap: layout.spacing.paddings.small,
+    paddingBottom: layout.spacing.paddings.big
   },
   cardContentHeader: {
     flexDirection: "row",
     alignItems: "center",
-    columnGap: 12
+    columnGap: layout.spacing.columnGap.regular
   },
   cardBody: {
     flexDirection: "row",
@@ -126,7 +134,7 @@ const styles = StyleSheet.create({
   cardContentBodyPlaceTime: {
     flexDirection: "row",
     alignItems: "center",
-    columnGap: 24
+    columnGap: layout.spacing.columnGap.big
   },
   cardBodyCalendarIcon: {
     flex: 1,
@@ -137,7 +145,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center"
   },
-  cardFooter: { paddingBottom: 20 },
+  cardFooter: { paddingBottom: layout.spacing.columnGap.big - 4 },
   switch: { transform: [{ scaleX: 0.5 }, { scaleY: 0.5 }] }
 })
 

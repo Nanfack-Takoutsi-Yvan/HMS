@@ -1,8 +1,10 @@
-import AppStateContext from "@services/context"
 import { useRouter } from "expo-router"
 import { useContext } from "react"
 import { StyleSheet, View, ScrollView } from "react-native"
 import { Avatar, Text, Card } from "react-native-paper"
+
+import AppStateContext from "@services/context"
+import layout from "@constants/layout"
 
 export default function TabTwoScreen() {
   const router = useRouter()
@@ -23,7 +25,7 @@ export default function TabTwoScreen() {
                   color="#000"
                   icon="translate"
                   style={styles.avatar}
-                  size={48}
+                  size={layout.size.icons.big}
                 />
               </View>
               <Text variant="titleMedium">{locale.t("common.language")}</Text>
@@ -41,8 +43,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingVertical: 12
+    paddingHorizontal: layout.spacing.paddings.big,
+    paddingVertical: layout.spacing.paddings.small
   },
   card: {
     backgroundColor: "#fff"
@@ -50,11 +52,11 @@ const styles = StyleSheet.create({
   cardContent: {
     flexDirection: "row",
     alignItems: "center",
-    columnGap: 16
+    columnGap: layout.spacing.columnGap.regular
   },
   avatar: {
-    borderRadius: 10,
+    borderRadius: layout.border.radius.regular,
     backgroundColor: "#fff",
-    borderWidth: 1
+    borderWidth: layout.border.width.regular
   }
 })

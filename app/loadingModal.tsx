@@ -1,8 +1,10 @@
-import AppStateContext from "@services/context"
 import { useRouter } from "expo-router"
 import { useContext, useEffect } from "react"
 import { View, StyleSheet, ActivityIndicator } from "react-native"
 import { useTheme } from "react-native-paper/src/core/theming"
+
+import layout from "@constants/layout"
+import AppStateContext from "@services/context"
 
 export default function LoadingModalScreen() {
   const router = useRouter()
@@ -41,6 +43,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 120,
     height: 120,
-    borderRadius: 30
+    borderRadius: layout.border.radius.big
   }
 })

@@ -1,10 +1,12 @@
-import AppointmentCard from "@components/AppointmentCard"
-import AppStateContext from "@services/context"
 import { useContext } from "react"
-import { StyleSheet, View, ScrollView, FlatList } from "react-native"
+import { StyleSheet, ScrollView, FlatList, View } from "react-native"
 import { Text, FAB, useTheme } from "react-native-paper"
 import { useRouter } from "expo-router"
+
+import AppointmentCard from "@components/AppointmentCard"
 import SkeletonLoaders from "@components/SkeletonLoaders"
+import AppStateContext from "@services/context"
+import layout from "@constants/layout"
 
 export default function TabOneScreen() {
   const { locale, appointments, loading } = useContext(AppStateContext)
@@ -20,7 +22,7 @@ export default function TabOneScreen() {
       {loading && (
         <ScrollView style={styles.screen} showsVerticalScrollIndicator={false}>
           <View style={styles.screen}>
-            <SkeletonLoaders number={2} />
+            <SkeletonLoaders number={layout.skeleton.number} />
           </View>
         </ScrollView>
       )}
@@ -30,7 +32,7 @@ export default function TabOneScreen() {
           data={appointments}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ rowGap: 16 }}
+          contentContainerStyle={styles.flatList}
           renderItem={data => <AppointmentCard info={data.item} />}
         />
       )}
@@ -51,16 +53,17 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingTop: 30,
-    paddingHorizontal: 24,
-    rowGap: 16,
+    paddingTop: layout.spacing.paddings.big,
+    paddingHorizontal: layout.spacing.paddings.big,
+    rowGap: layout.spacing.rowGap.regular,
     backgroundColor: "#fff"
   },
   fab: {
     position: "absolute",
-    margin: 16,
-    right: 0,
-    bottom: 24,
-    borderRadius: 100
-  }
+    margin: layout.spacing.margin.regular,
+    right: layout.spacing.margin.null,
+    bottom: layout.spacing.margin.big,
+    borderRadius: layout.border.radius.xBig
+  },
+  flatList: { rowGap: layout.spacing.rowGap.regular }
 })

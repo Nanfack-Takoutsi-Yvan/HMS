@@ -1,4 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router"
+import { useContext, useEffect, useState } from "react"
 import { StatusBar } from "expo-status-bar"
 import {
   Button,
@@ -18,24 +19,24 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity
 } from "react-native"
-
-import Appointment from "@services/models/appointment"
-import { useContext, useEffect, useState } from "react"
-import AppStateContext from "@services/context"
-import CalendarDays from "@components/CalendarDays"
-import { DATE_FORMAT } from "@components/CalendarDays/__index.utils"
-import DateInput from "@components/DateInput/index"
+import * as Haptics from "expo-haptics"
 import {
   MultipleSelectList,
   SelectList
 } from "react-native-dropdown-select-list"
 import Icon from "react-native-paper/src/components/Icon"
+
+import Appointment from "@services/models/appointment"
+import AppStateContext from "@services/context"
+import layoutConstants from "@constants/layout"
+import CalendarDays from "@components/CalendarDays"
+import { DATE_FORMAT } from "@components/CalendarDays/__index.utils"
+import DateInput from "@components/DateInput/index"
 import { RichTextViewer } from "@siposdani87/expo-rich-text-editor"
 import createAppointmentSchema from "@services/validation/createAppointmentSchema"
-import * as Haptics from "expo-haptics"
 
 export default function ModalScreen() {
-  const [selected, setSelected] = useState([])
+  const [selected, setSelected] = useState<string[]>([])
 
   const { locale, setLoading } = useContext(AppStateContext)
   const { colors } = useTheme()
@@ -159,7 +160,12 @@ export default function ModalScreen() {
                           dropdownStyles={styles.dropDown}
                           dropdownItemStyles={styles.dropDownItem}
                           placeholder={locale.t("modal.select")}
-                          arrowicon={<Icon source="chevron-down" size={24} />}
+                          arrowicon={
+                            <Icon
+                              source="chevron-down"
+                              size={layoutConstants.size.icons.small}
+                            />
+                          }
                         />
                       </View>
 
@@ -185,7 +191,7 @@ export default function ModalScreen() {
                         ]}
                       >
                         <MultipleSelectList
-                          setSelected={(val: any) => {
+                          setSelected={(val: string[]) => {
                             setSelected(val)
                           }}
                           onSelect={() =>
@@ -371,41 +377,35 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: Platform.OS === "android" ? 24 : 12,
-    paddingBottom: 12
+    paddingHorizontal: layoutConstants.spacing.paddings.big,
+    paddingTop:
+      Platform.OS === "android"
+        ? layoutConstants.spacing.paddings.big
+        : layoutConstants.spacing.paddings.small,
+    paddingBottom: layoutConstants.spacing.paddings.small
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold"
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%"
-  },
-  iconButton: { marginRight: 15 },
+  iconButton: { marginRight: layoutConstants.spacing.margin.regular },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center"
   },
   form: {
-    rowGap: 24,
+    rowGap: layoutConstants.spacing.rowGap.big,
     flex: 1
   },
   consignView: {
-    borderRadius: 10,
-    borderWidth: 1,
+    borderRadius: layoutConstants.border.radius.regular,
+    borderWidth: layoutConstants.border.width.regular,
     borderColor: "rgba(0,0,0,0.08)",
-    paddingHorizontal: 16,
-    rowGap: 2
+    paddingHorizontal: layoutConstants.spacing.paddings.regular,
+    rowGap: layoutConstants.spacing.rowGap.small
   },
   days: {
     flex: 1,
     height: 75,
     overflow: "hidden",
-    paddingBottom: 8
+    paddingBottom: layoutConstants.spacing.paddings.small
   },
   switchSection: {
     flexDirection: "row",
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
   dayTile: {
     flex: 1,
     height: 50,
-    borderRadius: 13
+    borderRadius: layoutConstants.border.radius.regular
   },
   field: {
     backgroundColor: "#fff"
@@ -424,23 +424,23 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   button: {
-    borderRadius: 5
+    borderRadius: layoutConstants.spacing.paddings.small
   },
   selectInput: {
     borderColor: "transparent",
-    paddingHorizontal: 0
+    paddingHorizontal: layoutConstants.spacing.paddings.null
   },
   dropDown: {
     borderColor: "transparent",
     borderTopColor: "rgba(30,30,30,0.1)",
-    borderRadius: 0
+    borderRadius: layoutConstants.border.radius.null
   },
   dropDownItem: {
-    paddingHorizontal: 0
+    paddingHorizontal: layoutConstants.spacing.paddings.null
   },
   multipleSelectInput: {
     borderColor: "transparent",
-    paddingHorizontal: 0,
-    padding: 0
+    padding: layoutConstants.spacing.paddings.null,
+    paddingHorizontal: layoutConstants.spacing.paddings.null
   }
 })

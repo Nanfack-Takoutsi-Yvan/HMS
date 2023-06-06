@@ -9,10 +9,11 @@ import {
 } from "react-native"
 import { Button, IconButton, Text, useTheme } from "react-native-paper"
 import { actions, RichEditor, RichToolbar } from "react-native-pell-rich-editor"
-
 import { useContext, useEffect, useRef, useState } from "react"
 import { useRouter, useLocalSearchParams } from "expo-router"
+
 import AppStateContext from "@services/context"
+import layout from "@constants/layout"
 
 export default function ModalScreen() {
   const [value, setValue] = useState<string>("")
@@ -94,8 +95,11 @@ export default function ModalScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingVertical: Platform.OS === "ios" ? 12 : 24
+    paddingHorizontal: layout.spacing.paddings.big,
+    paddingVertical:
+      Platform.OS === "ios"
+        ? layout.spacing.paddings.small
+        : layout.spacing.paddings.big
   },
   screen: {
     flex: 1,
@@ -113,8 +117,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 24,
-    paddingVertical: 4,
+    paddingHorizontal: layout.spacing.paddings.big,
+    paddingVertical: layout.spacing.paddings.xSmall,
     backgroundColor: "rgba(30, 30, 30, 0.1)"
   }
 })
