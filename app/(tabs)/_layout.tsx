@@ -9,12 +9,21 @@ import Avatar from "@components/Avatar"
 
 export default function TabLayout() {
   const { colors } = useTheme()
-  const { locale } = useContext(AppStateContext)
+  const { locale, isDarkTheme } = useContext(AppStateContext)
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colors.primary
+        tabBarActiveTintColor: colors.primary,
+        headerStyle: {
+          backgroundColor: isDarkTheme ? colors.background : undefined
+        },
+        headerTitleStyle: {
+          color: isDarkTheme ? "#eee" : undefined
+        },
+        tabBarStyle: {
+          backgroundColor: isDarkTheme ? colors.background : undefined
+        }
       }}
     >
       <Tabs.Screen
@@ -22,7 +31,10 @@ export default function TabLayout() {
         options={{
           headerTitle: "",
           title: locale.t("availabilities.tab"),
-          headerStyle: styles.header,
+          headerStyle: {
+            ...styles.header,
+            backgroundColor: isDarkTheme ? colors.background : undefined
+          },
           tabBarIcon: ({ color, size }) => (
             <Icon source="calendar-today" color={color} size={size} />
           ),

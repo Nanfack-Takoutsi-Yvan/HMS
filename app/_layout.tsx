@@ -1,5 +1,5 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome"
-import { PaperProvider } from "react-native-paper"
+import { PaperProvider, useTheme } from "react-native-paper"
 import { useFonts } from "expo-font"
 import { SplashScreen, Stack } from "expo-router"
 import { useEffect, useMemo, useState } from "react"
@@ -9,6 +9,7 @@ import useLocales from "@hooks/locale/useTranslation"
 import AppStateContext from "@services/context"
 import Appointment from "@services/models/appointment"
 import * as Haptics from "expo-haptics"
+import { useColorScheme } from "react-native"
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -45,6 +46,10 @@ function RootLayoutNav() {
   const [loading, setLoading] = useState<boolean>(true)
 
   const { i18n, setLocale } = useLocales(localization.locale)
+  const theme = useColorScheme()
+  const { colors } = useTheme()
+
+  const isDarkTheme = theme === "dark"
 
   useEffect(() => {
     const unsubscribe = Appointment.getAllAppointments(setAppointments)
@@ -59,8 +64,15 @@ function RootLayoutNav() {
   }, [appointments])
 
   const contextValue = useMemo(
-    () => ({ setLocale, locale: i18n, appointments, loading, setLoading }),
-    [i18n, setLocale, appointments, loading, setLoading]
+    () => ({
+      setLocale,
+      locale: i18n,
+      appointments,
+      loading,
+      setLoading,
+      isDarkTheme
+    }),
+    [i18n, setLocale, appointments, loading, setLoading, isDarkTheme]
   )
 
   return (
@@ -74,11 +86,28 @@ function RootLayoutNav() {
           />
           <Stack.Screen
             name="consign"
-            options={{ presentation: "containedModal" }}
+            options={{
+              presentation: "containedModal",
+              headerStyle: {
+                backgroundColor: isDarkTheme ? colors.background : undefined
+              },
+              headerTitleStyle: {
+                color: isDarkTheme ? "#eee" : undefined
+              }
+            }}
           />
           <Stack.Screen
             name="loadingModal"
-            options={{ presentation: "containedTransparentModal" }}
+            options={{
+              presentation: "containedTransparentModal",
+
+              headerStyle: {
+                backgroundColor: isDarkTheme ? colors.background : undefined
+              },
+              headerTitleStyle: {
+                color: isDarkTheme ? "#eee" : undefined
+              }
+            }}
           />
         </Stack>
       </PaperProvider>

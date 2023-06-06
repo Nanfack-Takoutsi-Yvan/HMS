@@ -1,12 +1,23 @@
 import AppStateContext from "@services/context"
 import { Stack } from "expo-router"
 import { useContext } from "react"
+import { useTheme } from "react-native-paper/src/core/theming"
 
 function SettingsStackNavigator() {
-  const { locale } = useContext(AppStateContext)
+  const { locale, isDarkTheme } = useContext(AppStateContext)
+  const { colors } = useTheme()
 
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: isDarkTheme ? colors.background : undefined
+        },
+        headerTitleStyle: {
+          color: isDarkTheme ? "#eee" : undefined
+        }
+      }}
+    >
       <Stack.Screen
         name="index"
         options={{

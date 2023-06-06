@@ -1,25 +1,34 @@
 import CalendarDays from "@components/CalendarDays"
 import { DATE_FORMAT } from "@components/CalendarDays/__index.utils"
+import layout from "@constants/layout"
 import AppStateContext from "@services/context"
 import { getTime } from "@services/utils/dateTime"
 import formatNumber from "@services/utils/formating"
 import { FC, useContext } from "react"
-import { StyleSheet, View } from "react-native"
+import { Platform, StyleSheet, useColorScheme } from "react-native"
 import { Avatar, Switch, Text, Divider, useTheme } from "react-native-paper"
 import Icon from "react-native-paper/src/components/Icon"
+import { View } from "@components/Themed"
 
 const AppointmentCard: FC<AppointmentCardProps> = ({
   info: { location, consign, price, startTime, endTime, activate, days, type }
 }) => {
   const { locale } = useContext(AppStateContext)
   const { colors } = useTheme()
+  const theme = useColorScheme()
 
   const isAvailable = `${activate}` === "true"
   const hospitals = location.split(",")
   const text = consign?.replace(/<[^>]+>/g, "")
+  const isDarkTheme = theme === "dark"
 
   return (
-    <View style={styles.card}>
+    <View
+      style={[
+        styles.card,
+        isDarkTheme ? styles.borderDark : styles.borderLight
+      ]}
+    >
       <View style={[styles.cardHeader, styles.padding]}>
         <View>
           <Text variant="labelMedium">
@@ -38,7 +47,13 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
           />
         </View>
       </View>
-      <Divider />
+      <Divider
+        style={{
+          backgroundColor: isDarkTheme
+            ? styles.borderDark.borderColor
+            : styles.borderLight.borderColor
+        }}
+      />
       <View style={[styles.cardContent, styles.padding]}>
         <View style={styles.cardContentHeader}>
           <Avatar.Text
@@ -62,7 +77,11 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
           </View>
           {isAvailable && (
             <View style={styles.cardBodyCalendarIcon}>
-              <Icon source="calendar-month" size={24} color={colors.primary} />
+              <Icon
+                source="calendar-month"
+                size={layout.size.icons.small}
+                color={colors.primary}
+              />
             </View>
           )}
         </View>
@@ -71,14 +90,20 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
           <CalendarDays format={DATE_FORMAT.SHORT} value={days} />
           <View>
             <Text variant="titleMedium">
-              {formatNumber(price!, locale.locale)} xaf
+              {price && formatNumber(price, locale.locale)} xaf
             </Text>
           </View>
         </View>
       </View>
       {consign && (
         <>
-          <Divider />
+          <Divider
+            style={{
+              backgroundColor: isDarkTheme
+                ? styles.borderDark.borderColor
+                : styles.borderLight.borderColor
+            }}
+          />
           <View style={[styles.cardFooter, styles.padding]}>
             <Text numberOfLines={2} ellipsizeMode="tail">
               {text}
@@ -92,32 +117,35 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    borderWidth: 1,
-    borderRadius: 15,
-    borderColor: "rgba(0, 0, 0, 0.1)",
-    backgroundColor: "#fff"
+    borderWidth: layout.border.width.regular,
+    borderRadius: layout.border.radius.regular
   },
   padding: {
-    paddingHorizontal: 16,
-    paddingVertical: 8
+    paddingHorizontal: layout.spacing.paddings.regular,
+    paddingVertical:
+      Platform.OS === "android"
+        ? layout.spacing.paddings.xSmall
+        : layout.spacing.paddings.xSmall * 2
   },
   cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: "transparent"
   },
   cardHeaderAction: {
     flexDirection: "row",
     alignItems: "center"
   },
   cardContent: {
-    rowGap: 12,
-    paddingBottom: 20
+    rowGap: layout.spacing.paddings.small,
+    paddingBottom: layout.spacing.paddings.big,
+    backgroundColor: "transparent"
   },
   cardContentHeader: {
     flexDirection: "row",
     alignItems: "center",
-    columnGap: 12
+    columnGap: layout.spacing.columnGap.regular
   },
   cardBody: {
     flexDirection: "row",
@@ -126,7 +154,7 @@ const styles = StyleSheet.create({
   cardContentBodyPlaceTime: {
     flexDirection: "row",
     alignItems: "center",
-    columnGap: 24
+    columnGap: layout.spacing.columnGap.big
   },
   cardBodyCalendarIcon: {
     flex: 1,
@@ -137,8 +165,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center"
   },
-  cardFooter: { paddingBottom: 20 },
-  switch: { transform: [{ scaleX: 0.5 }, { scaleY: 0.5 }] }
+  cardFooter: {
+    paddingBottom: layout.spacing.columnGap.big - 4,
+    backgroundColor: "transparent"
+  },
+  switch: { transform: [{ scaleX: 0.5 }, { scaleY: 0.5 }] },
+  borderLight: {
+    borderColor: "rgba(0, 0, 0, 0.1)"
+  },
+  borderDark: {
+    borderColor: "rgba(230, 230, 230, 0.5)"
+  }
 })
 
 export default AppointmentCard
