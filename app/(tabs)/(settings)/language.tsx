@@ -10,7 +10,7 @@ const LanguageScreen: FC = () => {
     <View style={styles.container}>
       <View style={styles.card}>
         <Text variant="titleMedium">{locale.t("common.language")}</Text>
-        <Text>{locale.t(`common.${locale.locale}`)}</Text>
+        <Text>{locale.t(`common.${locale.locale.split("-")[0]}`)}</Text>
       </View>
       <View style={styles.card}>
         <View>
