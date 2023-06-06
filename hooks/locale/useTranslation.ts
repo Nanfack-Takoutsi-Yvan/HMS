@@ -14,6 +14,7 @@ const useLocales = (deviceLocale: string) => {
     setAppLocale(code)
 
     const localeKey = process.env.HMS_LOCALE
+
     if (localeKey) {
       storeData(localeKey, code)
     }
@@ -26,6 +27,8 @@ const useLocales = (deviceLocale: string) => {
       if (localeKey) {
         const storedLocale = await getData(localeKey)
         setLocale(storedLocale || deviceLocale)
+      } else {
+        setLocale(deviceLocale)
       }
     }
 
