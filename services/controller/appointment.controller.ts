@@ -1,11 +1,5 @@
 import db from "@db/firestore"
-import {
-  collection,
-  addDoc,
-  onSnapshot,
-  query,
-  setDoc
-} from "firebase/firestore"
+import { collection, addDoc, onSnapshot, query } from "firebase/firestore"
 
 export default class AppointmentController implements IAppointmentController {
   private resource

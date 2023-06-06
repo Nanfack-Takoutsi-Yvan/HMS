@@ -21,7 +21,8 @@
     "amount": "Montant",
     "submit": "Valider",
     "start": "Début",
-    "end": "Fin"
+    "end": "Fin",
+    "language": "Langage"
   },
   "availabilities": {
     "tab": "Programmes",
@@ -31,7 +32,8 @@
     "remote": "À distance"
   },
   "settings": {
-    "tab": "Paramètres"
+    "tab": "Paramètres",
+    "selectLanguage": "Selectionner la langue"
   },
   "modal": {
     "title": "Nouveau Prog. de consult",
