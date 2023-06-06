@@ -11,12 +11,6 @@ export default function TabOneScreen() {
   const { colors } = useTheme()
   const router = useRouter()
 
-  const sortedAppointments = appointments?.sort(
-    (appointmentA, appointmentB) =>
-      new Date(appointmentA?.startTime).getTime() -
-      new Date(appointmentB?.startTime).getTime()
-  )
-
   return (
     <View style={styles.container}>
       <View>
